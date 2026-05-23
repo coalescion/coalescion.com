@@ -1,0 +1,61 @@
+:root {
+  --cream:#F9E4BC
+;
+  --ink: #000000;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: "Times New Roman", Times, serif;
+}
+
+p {
+  text-align: center;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+main {
+  padding: 5rem;
+}
+
+.site-title {
+  margin-top: 0;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+.site-details {
+  margin-top: 0;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+#descrip2 {
+  white-space: nowrap;
+}
+
+#descrip1 {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 480px) {
+  main {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+}
