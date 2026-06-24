@@ -1,7 +1,11 @@
 :root {
-  --cream:#F9E4BC
-;
+  --cream: #f9e4bc;
   --ink: #000000;
+  --reading-width: 42rem;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
@@ -10,10 +14,6 @@ body {
   background-color: var(--cream);
   color: var(--ink);
   font-family: "Times New Roman", Times, serif;
-}
-
-p {
-  text-align: center;
 }
 
 a {
@@ -25,8 +25,57 @@ a {
   visibility: hidden;
 }
 
+.drift-letter {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.drift-accessible-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 main {
   padding: 5rem;
+}
+
+.site-logo {
+  display: block;
+  width: min(70vw, 14rem);
+  height: auto;
+  margin: 0 auto 2rem;
+  transform-origin: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.site-logo.is-rotating {
+  animation: logo-rotate 20s linear infinite;
+  will-change: transform;
+}
+
+@keyframes logo-rotate {
+  0% {
+    rotate: 0turn;
+  }
+
+  45%,
+  50% {
+    rotate: 1turn;
+  }
+
+  95%,
+  100% {
+    rotate: 0turn;
+  }
 }
 
 .site-title {
@@ -53,9 +102,90 @@ main {
   margin-bottom: 1rem;
 }
 
+.poem-menu {
+  width: min(100%, var(--reading-width));
+  margin: 3rem auto 0;
+}
+
+.menu-poem {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+.poem-line {
+  display: block;
+  text-align: left;
+}
+
+.poem-line:nth-child(even) {
+  text-align: right;
+}
+
+.poem-line a:hover,
+.poem-line a:focus-visible,
+.poem-line a:active {
+  font-style: italic;
+}
+
+.poem-line a:hover em,
+.poem-line a:focus-visible em,
+.poem-line a:active em {
+  font-style: normal;
+  font-weight: 700;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.section-page {
+  width: min(calc(100% - 3rem), var(--reading-width));
+  margin-inline: auto;
+  padding: 5rem 0;
+}
+
+.section-title {
+  margin: 0 0 2rem;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.back-link {
+  font-size: 1.1rem;
+}
+
 @media (max-width: 480px) {
   main {
     padding-left: 0.25rem;
     padding-right: 0.25rem;
+  }
+
+  .section-page {
+    width: calc(100% - 1.5rem);
+    padding: 2rem 0;
+  }
+
+  .menu-poem {
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hidden {
+    visibility: visible;
+  }
+
+  .site-logo.is-rotating {
+    animation: none;
+    will-change: auto;
+  }
+
+  .drift-letter {
+    will-change: auto;
   }
 }
