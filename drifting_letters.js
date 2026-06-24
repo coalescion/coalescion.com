@@ -366,7 +366,7 @@
     activeAnimations.forEach((animation) => {
       try {
         animation.finish();
-      } catch (_error) {
+      } catch {
         // An animation can already be idle when the page is interrupted.
       }
     });
@@ -420,15 +420,11 @@
 
       const headingElements = Array.from(document.querySelectorAll(headingSelector));
       const menuContainers = Array.from(document.querySelectorAll(menuSelector));
-      const menuLines = menuContainers.flatMap((menu) => (
+      const menuLines = menuContainers.flatMap((menu) =>
         Array.from(menu.querySelectorAll(".poem-line"))
-      ));
-
-      await animateGroup(
-        headingElements,
-        headingElements,
-        timing.initialDelay
       );
+
+      await animateGroup(headingElements, headingElements, timing.initialDelay);
 
       if (!interrupted) {
         await new Promise((resolve) => setTimeout(resolve, timing.menuDelay));
