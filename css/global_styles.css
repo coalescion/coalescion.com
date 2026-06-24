@@ -54,6 +54,7 @@ main {
   transform-origin: center;
   cursor: pointer;
   touch-action: manipulation;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -98,6 +99,12 @@ main {
 
 #descrip1 {
   margin-bottom: 1rem;
+}
+
+.synonyms-link:hover em,
+.synonyms-link:focus-visible em {
+  font-style: normal;
+  font-weight: 700;
 }
 
 .poem-menu {
@@ -158,8 +165,8 @@ main {
 
 @media (max-width: 480px) {
   main {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 
   .section-page {
@@ -168,8 +175,17 @@ main {
   }
 
   .menu-poem {
-    font-size: 1.05rem;
+    font-size: var(--mobile-menu-font-size, 1.05rem);
     line-height: 1.55;
+  }
+
+  .site-details {
+    font-size: var(--mobile-details-font-size, 1.2rem);
+    white-space: nowrap;
+  }
+
+  .poem-line {
+    white-space: nowrap;
   }
 }
 

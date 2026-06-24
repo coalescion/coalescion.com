@@ -35,6 +35,104 @@
   let activeAnimations = [];
   let interrupted = false;
 
+  const fitMobileMenu = () => {
+    const mobileMenu = window.matchMedia("(max-width: 480px)");
+
+    document.querySelectorAll(menuSelector).forEach((menu) => {
+      menu.style.removeProperty("--mobile-menu-font-size");
+
+      if (!mobileMenu.matches) {
+        return;
+      }
+
+      const lines = Array.from(menu.querySelectorAll(".poem-line a"));
+      const availableWidth = menu.clientWidth;
+      const longestLineWidth = Math.max(
+        0,
+        ...lines.map((line) => line.getBoundingClientRect().width)
+      );
+
+      if (longestLineWidth <= availableWidth || longestLineWidth === 0) {
+        return;
+      }
+
+      const preferredFontSize = Number.parseFloat(
+        window.getComputedStyle(menu).fontSize
+      );
+      const fittedFontSize = preferredFontSize
+        * (availableWidth / longestLineWidth)
+        * 0.995;
+
+      menu.style.setProperty(
+        "--mobile-menu-font-size",
+        `${fittedFontSize}px`
+      );
+    });
+  };
+
+  const fitMobileDetails = () => {
+    const main = document.querySelector("main");
+    const details = Array.from(document.querySelectorAll(".site-details"));
+
+    if (!main || details.length === 0) {
+      return;
+    }
+
+    main.style.removeProperty("--mobile-details-font-size");
+
+    if (!window.matchMedia("(max-width: 480px)").matches) {
+      return;
+    }
+
+    const availableWidth = details[0].clientWidth;
+    const longestLineWidth = Math.max(
+      ...details.map((detail) => {
+        const range = document.createRange();
+        range.selectNodeContents(detail);
+        return range.getBoundingClientRect().width;
+      })
+    );
+
+    if (longestLineWidth <= availableWidth || longestLineWidth === 0) {
+      return;
+    }
+
+    const preferredFontSize = Number.parseFloat(
+      window.getComputedStyle(details[0]).fontSize
+    );
+    const fittedFontSize = preferredFontSize
+      * (availableWidth / longestLineWidth)
+      * 0.995;
+
+    main.style.setProperty(
+      "--mobile-details-font-size",
+      `${fittedFontSize}px`
+    );
+  };
+
+  const setupMobileTextFitting = () => {
+    let resizeFrame = null;
+    const scheduleFit = () => {
+      if (resizeFrame !== null) {
+        window.cancelAnimationFrame(resizeFrame);
+      }
+
+      resizeFrame = window.requestAnimationFrame(() => {
+        resizeFrame = null;
+        fitMobileMenu();
+        fitMobileDetails();
+      });
+    };
+
+    fitMobileMenu();
+    fitMobileDetails();
+    window.addEventListener("resize", scheduleFit);
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(scheduleFit);
+    }
+  };
+
   const isBackForwardNavigation = () => {
     const navigationEntry = typeof window.performance.getEntriesByType === "function"
       ? window.performance.getEntriesByType("navigation")[0]
@@ -446,4 +544,5 @@
   };
 
   setupLogoInteraction();
+  setupMobileTextFitting();
 })();
