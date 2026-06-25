@@ -27,6 +27,7 @@
     returningToUpright: false,
     returnDegreesRemaining: 0,
     clickImpulse: 1.5,
+    clickImpulseVariation: 0.16,
     slowdownDuration: 3000,
     idleDuration: 2000,
     automaticVelocity: 360 / 9000,
@@ -281,7 +282,10 @@
       logo.style.rotate = `${logoSpin.angle}deg`;
     }
 
-    logoSpin.velocity += logoSpin.clickImpulse;
+    const clickImpulse = logoSpin.clickImpulse
+      + (Math.random() * 2 - 1) * logoSpin.clickImpulseVariation;
+
+    logoSpin.velocity += clickImpulse;
     logoSpin.deceleration = logoSpin.velocity / logoSpin.slowdownDuration;
     logoSpin.lastFrameTime = window.performance.now();
 
