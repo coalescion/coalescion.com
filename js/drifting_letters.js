@@ -3,6 +3,7 @@
   const menuSelector = "#poem";
   const logoSelector = ".site-logo";
   const animatedSelector = `${headingSelector}, ${menuSelector}`;
+  const skipHomeIntroStorageKey = "coalescionSkipHomeIntro";
 
   const timing = {
     initialDelay: 350,
@@ -145,6 +146,19 @@
 
     return window.performance.navigation
       && window.performance.navigation.type === 2;
+  };
+
+  const shouldSkipHomeIntro = () => {
+    try {
+      if (window.sessionStorage.getItem(skipHomeIntroStorageKey) !== "1") {
+        return false;
+      }
+
+      window.sessionStorage.removeItem(skipHomeIntroStorageKey);
+      return true;
+    } catch {
+      return false;
+    }
   };
 
   const randomBetween = (min, max) => min + Math.random() * (max - min);
@@ -495,6 +509,7 @@
 
   window.addEventListener("pageshow", (event) => {
     if (event.persisted) {
+      shouldSkipHomeIntro();
       settleHomeAfterReturn();
     }
   });
@@ -502,7 +517,7 @@
   window.startDriftingLettersEffect = async function startDriftingLettersEffect() {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    if (isBackForwardNavigation()) {
+    if (isBackForwardNavigation() || shouldSkipHomeIntro()) {
       settleHomeAfterReturn();
       return;
     }
