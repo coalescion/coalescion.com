@@ -42,7 +42,8 @@
       }
 
       const lines = Array.from(menu.querySelectorAll(linkSelector));
-      const availableWidth = menu.clientWidth;
+      const settledInset = Math.abs(defaultSettledInset);
+      const availableWidth = Math.max(0, menu.clientWidth - settledInset * 2);
       const longestLineWidth = Math.max(
         0,
         ...lines.map((line) => line.getBoundingClientRect().width)

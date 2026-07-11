@@ -673,6 +673,12 @@ main {
 }
 
 @media (max-width: 480px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
   main {
     padding-left: 2rem;
     padding-right: 2rem;
