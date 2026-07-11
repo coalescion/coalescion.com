@@ -689,6 +689,10 @@ main {
     width: calc(100% - 1.5rem);
   }
 
+  .poem-page--needle .poem-figure--pages {
+    margin-left: 0;
+  }
+
   .in-progress-page {
     padding-top: 3rem;
     width: calc(100% - 1.5rem);
@@ -701,6 +705,10 @@ main {
   .menu-poem {
     font-size: var(--mobile-menu-font-size, 1.05rem);
     line-height: 1.7;
+  }
+
+  .science-intro {
+    font-size: var(--mobile-menu-font-size, 1.05rem);
   }
 
   .site-details {
