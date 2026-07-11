@@ -54,7 +54,7 @@
   };
 
   const initializePoemSvg = (image) => {
-    if (image.complete) {
+    if (image.complete && image.naturalWidth) {
       scalePoemSvg(image);
       return;
     }
@@ -71,6 +71,8 @@
   } else {
     scaleAllPoemSvgs();
   }
+
+  window.scalePoemSvgs = scaleAllPoemSvgs;
 
   window.addEventListener("resize", scaleAllPoemSvgs);
 })();

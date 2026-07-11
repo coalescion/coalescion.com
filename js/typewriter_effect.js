@@ -11,6 +11,33 @@
     "?": 1,
     "—": 0.75,
   };
+  const skipScienceIntroStorageKey = "coalescionSkipScienceIntro";
+
+  const isBackForwardNavigation = () => {
+    const navigationEntry = typeof window.performance.getEntriesByType === "function"
+      ? window.performance.getEntriesByType("navigation")[0]
+      : null;
+
+    if (navigationEntry) {
+      return navigationEntry.type === "back_forward";
+    }
+
+    return window.performance.navigation
+      && window.performance.navigation.type === 2;
+  };
+
+  const shouldSkipSectionTitleTypewriter = () => {
+    if (!document.querySelector("#science-intro")) {
+      return false;
+    }
+
+    try {
+      return window.sessionStorage.getItem(skipScienceIntroStorageKey) === "1"
+        || isBackForwardNavigation();
+    } catch {
+      return isBackForwardNavigation();
+    }
+  };
 
   const collectTextNodes = (element) => {
     const nodes = [];
@@ -111,8 +138,8 @@
       onComplete = null,
     } = options;
 
-    const getCharDelay = (paragraphID) => (
-      typeof charDelay === "function" ? charDelay(paragraphID) : charDelay
+    const getCharDelay = (paragraphID, index, fullText) => (
+      typeof charDelay === "function" ? charDelay(paragraphID, index, fullText) : charDelay
     );
 
     const getParagraphDelay = (paragraphID) => (
@@ -161,7 +188,7 @@
 
       for (let i = 0; i < fullText.length + 1; i++) {
         renderTextNodes(nodes, chunks, i);
-        await delay(getCharDelay(paragraphID));
+        await delay(getCharDelay(paragraphID, i, fullText));
 
         const lastChar = fullText.charAt(i - 1);
         if (sentencePausePattern.test(lastChar)) {
@@ -212,6 +239,20 @@
     });
   };
 
+  const revealSectionBackArrowsInstantly = () => {
+    document.querySelectorAll(".home-back-arrow").forEach((arrow) => {
+      arrow.style.animation = "none";
+      arrow.style.opacity = "1";
+      arrow.classList.remove("hidden");
+    });
+  };
+
+  const dispatchSectionTitleComplete = (titles) => {
+    document.dispatchEvent(new CustomEvent("coalescion:section-title-complete", {
+      detail: { titles },
+    }));
+  };
+
   const startSectionTitleTypewriter = () => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const titles = Array.from(document.querySelectorAll(".typewriter-title"));
@@ -220,9 +261,17 @@
       return;
     }
 
+    if (shouldSkipSectionTitleTypewriter()) {
+      titles.forEach((title) => title.classList.remove("hidden"));
+      revealSectionBackArrowsInstantly();
+      dispatchSectionTitleComplete(titles);
+      return;
+    }
+
     if (reducedMotion.matches) {
       titles.forEach((title) => title.classList.remove("hidden"));
       revealSectionBackArrows();
+      dispatchSectionTitleComplete(titles);
       return;
     }
 
@@ -236,6 +285,7 @@
           revealSectionBackArrows();
         }
       },
+      onComplete: dispatchSectionTitleComplete,
     }).start();
   };
 

@@ -10,13 +10,23 @@
     <link rel="stylesheet" href="../css/global_styles.css">
 </head>
 <body>
-    <main class="section-page poem-page">
-        <p class="poem-date">december 2025</p>
-        <figure class="poem-figure">
-            <img class="poem-image" src="poem_svgs/to_catch_a_needle.svg" alt="Poem titled to catch a needle" data-svg-source-font-size="16px" style="--poem-svg-font-size: 1.2rem;" />
+    <main class="section-page poem-page poem-page--needle">
+        <header class="needle-intro">
+            <p id="needleIntro" class="needle-intro-title needle-intro-title--hidden">to catch a needle
+
+a poetry series by <a href="../index.html"><em>coalescion.</em></a>
+november 2025</p>
+        </header>
+        <figure class="poem-figure poem-figure--pages needle-poem-figure" hidden>
+            <img class="poem-image" data-src="poem_svgs/to_catch_a_needle_1.svg" alt="to catch a needle, page 1" data-svg-source-font-size="16px" style="--poem-svg-font-size: 1.2rem;" />
+            <img class="poem-image" data-src="poem_svgs/to_catch_a_needle_2.svg" alt="to catch a needle, page 2" data-svg-source-font-size="16px" style="--poem-svg-font-size: 1.2rem;" />
+            <img class="poem-image" data-src="poem_svgs/to_catch_a_needle_3.svg" alt="to catch a needle, page 3" data-svg-source-font-size="16px" style="--poem-svg-font-size: 1.2rem;" />
+            <img class="poem-image" data-src="poem_svgs/to_catch_a_needle_4.svg" alt="to catch a needle, page 4" data-svg-source-font-size="16px" style="--poem-svg-font-size: 1.2rem;" />
         </figure>
     </main>
+    <script src="../js/typewriter_effect.js"></script>
     <script src="../js/poem_svg_scale.js"></script>
+    <script src="../js/to_catch_a_needle.js"></script>
     <script src="../js/title_spin.js"></script>
 </body>
 </html>
