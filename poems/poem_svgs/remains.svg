@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="324.5861pt" height="419.9142pt" viewBox="0 0 324.5861 419.9142">
 <defs>
+<filter id="brother-blur" x="-20%" y="-20%" width="140%" height="140%">
+<feGaussianBlur stdDeviation="2.8"/>
+</filter>
 <g>
 <g id="glyph-0-0">
 </g>
@@ -192,6 +195,9 @@
 </g>
 <g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
 <use xlink:href="#glyph-0-0" x="51.1951" y="40.0612"/>
+</g>
+<g filter="url(#brother-blur)">
+<g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
 <use xlink:href="#glyph-0-9" x="54.1951" y="40.0612"/>
 </g>
 <g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
@@ -208,6 +214,9 @@
 </g>
 <g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
 <use xlink:href="#glyph-0-12" x="103.1839" y="40.0612"/>
+</g>
+</g>
+<g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
 <use xlink:href="#glyph-0-0" x="107.1799" y="40.0612"/>
 <use xlink:href="#glyph-0-4" x="110.1799" y="40.0612"/>
 </g>
@@ -1795,6 +1804,9 @@
 <g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
 <use xlink:href="#glyph-0-24" x="232.8007" y="302.1412"/>
 <use xlink:href="#glyph-0-0" x="235.8007" y="302.1412"/>
+</g>
+<g filter="url(#brother-blur)">
+<g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
 <use xlink:href="#glyph-0-9" x="238.8007" y="302.1412"/>
 </g>
 <g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
@@ -1811,6 +1823,9 @@
 </g>
 <g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
 <use xlink:href="#glyph-0-12" x="287.7895" y="302.1412"/>
+</g>
+</g>
+<g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
 <use xlink:href="#glyph-0-0" x="291.7855" y="302.1412"/>
 <use xlink:href="#glyph-0-3" x="294.7855" y="302.1412"/>
 </g>
