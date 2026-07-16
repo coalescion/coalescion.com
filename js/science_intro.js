@@ -1,10 +1,11 @@
 (() => {
-  const introSelector = "#science-intro";
-  const menuSelector = "#science-menu-container";
+  const scriptOptions = document.currentScript?.dataset ?? {};
+  const introSelector = scriptOptions.introSelector || "#science-intro";
+  const menuSelector = scriptOptions.menuSelector || "#science-menu-container";
   const afterTitleDelay = 450;
   const afterIntroDelay = 550;
   const introCharDelay = 34;
-  const skipScienceIntroStorageKey = "coalescionSkipScienceIntro";
+  const skipScienceIntroStorageKey = scriptOptions.storageKey || "coalescionSkipScienceIntro";
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 

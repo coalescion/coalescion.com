@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="324.5861pt" height="419.9142pt" viewBox="0 0 324.5861 419.9142">
 <defs>
 <filter id="brother-blur" x="-20%" y="-20%" width="140%" height="140%">
-<feGaussianBlur stdDeviation="2.8"/>
+<feGaussianBlur stdDeviation="3"/>
 </filter>
 <g>
 <g id="glyph-0-0">

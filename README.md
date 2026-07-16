@@ -4,8 +4,8 @@ the aristic project of aiden karpf.
 ## Structure
 
 - `index.html` is the homepage.
-- `menu pages/` contains the top-level section pages linked from the homepage.
-- `poems/` contains individual poem pages linked from `menu pages/poetry.html`.
+- `menu_pages/` contains the top-level section pages linked from the homepage.
+- `poems/` contains individual poem pages linked from `menu_pages/poetry.html`.
 - `css/` contains shared styles.
 - `js/` contains shared page behavior.
 - `logo/` contains logo and brand image files.

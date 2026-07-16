@@ -1,5 +1,7 @@
 (() => {
-  const skipScienceIntroStorageKey = "coalescionSkipScienceIntro";
+  const scriptOptions = document.currentScript?.dataset ?? {};
+  const skipScienceIntroStorageKey = scriptOptions.storageKey || "coalescionSkipScienceIntro";
+  const backHref = scriptOptions.backHref || "../menu_pages/science.html";
 
   const handleBackToScience = () => {
     try {
@@ -10,7 +12,7 @@
   };
 
   const bindBackArrows = () => {
-    document.querySelectorAll('a[href="../menu%20pages/science.html"]').forEach((arrow) => {
+    document.querySelectorAll(`a[href="${backHref}"]`).forEach((arrow) => {
       arrow.addEventListener("click", handleBackToScience);
     });
   };

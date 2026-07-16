@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>śūnyatā venn diagram.</title>
+    <meta name="description" content="a three-way venn diagram of buddhism, the drug experience, and physics">
+    <link rel="canonical" href="https://coalescion.com/fringe_science/sunyata_venn_diagram.html">
+    <link rel="icon" type="image/png" sizes="96x96" href="../favicon.png">
+    <link rel="stylesheet" href="../css/global_styles.css">
+    <style>
+        .sunyata-page {
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .sunyata-main {
+            width: min(calc(100% - 2rem), 70rem);
+            margin-inline: auto;
+            padding: clamp(1.5rem, 5vw, 4rem) 0 3rem;
+        }
+
+        .sunyata-figure {
+            width: min(96%, 54rem);
+            margin: 0 auto;
+        }
+
+        .sunyata-figure svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .venn-see-also {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 20px;
+            margin-top: -6rem;
+            opacity: 0;
+            text-align: center;
+            transform: translateY(8px);
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+            visibility: hidden;
+        }
+
+        .venn-see-also a {
+            color: inherit;
+        }
+
+        .is-observation-view .venn-see-also,
+        .is-meditation-view .venn-see-also,
+        .is-time-view .venn-see-also {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 1.05s;
+            visibility: visible;
+        }
+
+        .venn-see-also__item {
+            display: none;
+        }
+
+        .is-observation-view .venn-see-also__item--observation,
+        .is-meditation-view .venn-see-also__item--meditation,
+        .is-time-view .venn-see-also__item--time {
+            display: inline;
+        }
+
+        .venn-circle {
+            fill-opacity: 0.16;
+            stroke: #17130f;
+            stroke-width: 2.25;
+            transform-box: view-box;
+            transition: opacity 0.45s ease, transform 1.2s cubic-bezier(0.65, 0, 0.2, 1) 0.22s;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .venn-circle--buddhism {
+            fill: #aa6349;
+        }
+
+        .venn-circle--drug {
+            fill: #b98550;
+        }
+
+        .venn-circle--physics {
+            fill: #806052;
+        }
+
+        .venn-label {
+            fill: #000;
+            font-family: "Times New Roman", Times, serif;
+            text-anchor: middle;
+        }
+
+        .venn-label--domain {
+            font-size: 27px;
+        }
+
+        .venn-label--overlap {
+            font-size: 23px;
+            letter-spacing: 0.025em;
+        }
+
+        .venn-label--center {
+            font-size: 37px;
+        }
+
+        .venn-link {
+            cursor: pointer;
+            outline: none;
+            transform-box: view-box;
+            transition: opacity 0.4s ease, transform 1s cubic-bezier(0.65, 0, 0.2, 1) 0.35s;
+        }
+
+        .venn-link text {
+            font-style: italic;
+            transition: font-size 1s cubic-bezier(0.65, 0, 0.2, 1) 0.35s;
+        }
+
+        .venn-link:not(.venn-link--disabled):hover text,
+        .venn-link:not(.venn-link--disabled):focus text {
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        .venn-link--disabled {
+            cursor: default;
+        }
+
+        .venn-link--buddhism {
+            transform-origin: 50% 15.44%;
+        }
+
+        .venn-link--drug {
+            transform-origin: 25.56% 79.11%;
+        }
+
+        .venn-link--physics {
+            transform-origin: 74.44% 82.28%;
+        }
+
+        .venn-link--meditation {
+            transform-origin: 31.78% 47.34%;
+        }
+
+        .venn-link--observation {
+            transform-origin: 68.22% 47.34%;
+        }
+
+        .venn-link--time {
+            transform-origin: 50% 76.96%;
+        }
+
+        .venn-link--sunyata {
+            transform-origin: 50% 59.49%;
+        }
+
+        .venn-link--sunyata text {
+            transition: opacity 1.4s ease;
+        }
+
+        .venn-sunyata-hit-target {
+            cursor: pointer;
+            fill: transparent;
+            pointer-events: none;
+        }
+
+        .venn-detail-link {
+            cursor: pointer;
+            opacity: 0;
+            outline: none;
+            pointer-events: none;
+            transform: translateY(8px);
+            transform-box: view-box;
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+            visibility: hidden;
+        }
+
+        .venn-detail-text {
+            fill: #000;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 20px;
+            font-style: normal;
+            text-anchor: middle;
+        }
+
+        .venn-detail-link:hover text,
+        .venn-detail-link:focus text {
+            font-weight: 700;
+        }
+
+        .is-observation-view .venn-circle--buddhism,
+        .is-observation-view .venn-circle--physics,
+        .is-returning-observation .venn-circle--buddhism,
+        .is-returning-observation .venn-circle--physics {
+            transform-origin: 57.5% 49.87%;
+        }
+
+        .is-observation-view .venn-circle--buddhism,
+        .is-observation-view .venn-circle--physics {
+            transform: translate(-7.5%, 0) rotate(-57.54deg);
+        }
+
+        .is-observation-view .venn-circle--drug,
+        .is-returning-observation .venn-circle--drug {
+            transform-origin: 35% 63.3%;
+        }
+
+        .is-observation-view .venn-circle--drug {
+            opacity: 0;
+            transform: scale(0.68);
+        }
+
+        .is-observation-view .venn-link--buddhism {
+            transform: translate(-23.9%, 22.5%);
+        }
+
+        .is-observation-view .venn-link--physics {
+            transform: translate(1.1%, -44.3%);
+        }
+
+        .is-observation-view .venn-link--observation {
+            transform: translate(-18.2%, 3.9%) rotate(90deg);
+        }
+
+        .is-observation-view .venn-link--observation text {
+            font-size: 29px;
+        }
+
+        .is-meditation-view .venn-circle--buddhism,
+        .is-meditation-view .venn-circle--drug,
+        .is-returning-meditation .venn-circle--buddhism,
+        .is-returning-meditation .venn-circle--drug {
+            transform-origin: 42.5% 49.87%;
+        }
+
+        .is-meditation-view .venn-circle--buddhism,
+        .is-meditation-view .venn-circle--drug {
+            transform: translate(7.5%, 0) rotate(-122.46deg);
+        }
+
+        .is-meditation-view .venn-circle--physics,
+        .is-returning-meditation .venn-circle--physics {
+            transform-origin: 65% 63.3%;
+        }
+
+        .is-meditation-view .venn-circle--physics {
+            opacity: 0;
+            transform: scale(0.68);
+        }
+
+        .is-meditation-view .venn-link--buddhism {
+            transform: translate(-23.9%, 22.5%);
+        }
+
+        .is-meditation-view .venn-link--drug {
+            transform: translate(50%, -43%);
+        }
+
+        .is-meditation-view .venn-link--meditation {
+            transform: translate(18.2%, 3.9%) rotate(90deg);
+        }
+
+        .is-meditation-view .venn-link--meditation text,
+        .is-time-view .venn-link--time text {
+            font-size: 29px;
+        }
+
+        .is-time-view .venn-circle--buddhism,
+        .is-returning-time .venn-circle--buddhism {
+            transform-origin: 50% 36.46%;
+        }
+
+        .is-time-view .venn-circle--buddhism {
+            opacity: 0;
+            transform: translateY(-8%) scale(0.68);
+        }
+
+        .is-time-view .venn-circle--drug {
+            transform: translate(1.1%, -13.4%);
+        }
+
+        .is-time-view .venn-circle--physics {
+            transform: translate(-1.1%, -13.4%);
+        }
+
+        .is-time-view .venn-link--drug {
+            transform: translate(0.6%, -43%);
+        }
+
+        .is-time-view .venn-link--physics {
+            transform: translate(1.1%, -44.3%);
+        }
+
+        .is-time-view .venn-link--time {
+            transform: translate(0, -25.7%) rotate(90deg);
+        }
+
+        @keyframes return-observation-label {
+            0% {
+                transform: translate(-18.2%, 3.9%) rotate(90deg);
+            }
+
+            45% {
+                transform: translate(-18.2%, 3.9%) rotate(0deg);
+            }
+
+            100% {
+                transform: none;
+            }
+        }
+
+        @keyframes return-meditation-label {
+            0% {
+                transform: translate(18.2%, 3.9%) rotate(90deg);
+            }
+
+            45% {
+                transform: translate(18.2%, 3.9%) rotate(0deg);
+            }
+
+            100% {
+                transform: none;
+            }
+        }
+
+        @keyframes return-time-label {
+            0% {
+                transform: translate(0, -25.7%) rotate(90deg);
+            }
+
+            45% {
+                transform: translate(0, -25.7%) rotate(0deg);
+            }
+
+            100% {
+                transform: none;
+            }
+        }
+
+        .is-returning-observation .venn-link--observation {
+            animation: return-observation-label 1.2s cubic-bezier(0.65, 0, 0.2, 1) both;
+        }
+
+        .is-returning-meditation .venn-link--meditation {
+            animation: return-meditation-label 1.2s cubic-bezier(0.65, 0, 0.2, 1) both;
+        }
+
+        .is-returning-time .venn-link--time {
+            animation: return-time-label 1.2s cubic-bezier(0.65, 0, 0.2, 1) both;
+        }
+
+        .is-returning-observation .venn-circle--drug,
+        .is-returning-meditation .venn-circle--physics,
+        .is-returning-time .venn-circle--buddhism {
+            transition-delay: 0.55s;
+        }
+
+        .is-returning-observation :is(.venn-link--drug, .venn-link--meditation, .venn-link--time, .venn-link--sunyata),
+        .is-returning-meditation :is(.venn-link--physics, .venn-link--observation, .venn-link--time, .venn-link--sunyata),
+        .is-returning-time :is(.venn-link--buddhism, .venn-link--meditation, .venn-link--observation, .venn-link--sunyata) {
+            transition-delay: 1s;
+        }
+
+        .is-observation-view .venn-detail-link--observation,
+        .is-meditation-view .venn-detail-link--meditation,
+        .is-time-view .venn-detail-link--time {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            transition-delay: 1.05s;
+            visibility: visible;
+        }
+
+        .is-observation-view :is(.venn-link--drug, .venn-link--meditation, .venn-link--time, .venn-link--sunyata),
+        .is-meditation-view :is(.venn-link--physics, .venn-link--observation, .venn-link--time, .venn-link--sunyata),
+        .is-time-view :is(.venn-link--buddhism, .venn-link--meditation, .venn-link--observation, .venn-link--sunyata) {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.9);
+        }
+
+        .is-sunyata-transition .venn-circle {
+            transition-delay: 0s;
+            transition-duration: 1.5s;
+        }
+
+        .is-sunyata-transition .venn-circle--buddhism {
+            transform: translate(0, 168px);
+        }
+
+        .is-sunyata-transition .venn-circle--drug {
+            transform: translate(135px, -44px);
+        }
+
+        .is-sunyata-transition .venn-circle--physics {
+            transform: translate(-135px, -44px);
+        }
+
+        .is-sunyata-transition .venn-link:not(.venn-link--sunyata),
+        .is-sunyata-transition .venn-detail-link {
+            opacity: 0;
+            pointer-events: none;
+            transition-delay: 0s;
+            transition-duration: 0.55s;
+        }
+
+        .is-sunyata-transition .venn-link--sunyata {
+            opacity: 1;
+            pointer-events: none;
+            transform: none;
+        }
+
+        .is-sunyata-converged .venn-link--sunyata {
+            pointer-events: auto;
+        }
+
+        .is-sunyata-converged .venn-sunyata-hit-target {
+            pointer-events: all;
+        }
+
+        .is-sunyata-converged .venn-link--sunyata text,
+        .is-sunyata-reversing .venn-link--sunyata text {
+            opacity: 0;
+        }
+
+        .is-sunyata-reversing .venn-link:not(.venn-link--sunyata),
+        .is-sunyata-reversing .venn-detail-link {
+            opacity: 0;
+            pointer-events: none;
+            transition-delay: 0s;
+        }
+
+        @media (max-width: 600px) {
+            .sunyata-main {
+                width: calc(100% - 1rem);
+                padding-top: 1.25rem;
+            }
+
+            .sunyata-figure {
+                margin-top: 1.5rem;
+            }
+
+            .venn-see-also {
+                font-size: clamp(0.875rem, 3.75vw, 1rem);
+                line-height: 1.2;
+                margin-top: 0;
+                padding-inline: 0.75rem;
+            }
+
+            .venn-label--domain {
+                font-size: 29px;
+            }
+
+            .venn-label--overlap {
+                font-size: 20px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .venn-circle,
+            .venn-link,
+            .venn-link text,
+            .venn-detail-link,
+            .venn-detail-text,
+            .venn-see-also {
+                transition-duration: 0.01ms;
+                transition-delay: 0s;
+            }
+
+            .is-sunyata-transition .venn-circle,
+            .is-sunyata-transition .venn-link:not(.venn-link--sunyata),
+            .is-sunyata-transition .venn-detail-link {
+                transition-duration: 0.01ms;
+            }
+
+            .is-observation-view .venn-detail-link--observation,
+            .is-meditation-view .venn-detail-link--meditation,
+            .is-time-view .venn-detail-link--time,
+            .is-observation-view .venn-see-also,
+            .is-meditation-view .venn-see-also,
+            .is-time-view .venn-see-also {
+                transition-delay: 0s;
+            }
+
+            .is-returning-observation .venn-link--observation,
+            .is-returning-meditation .venn-link--meditation,
+            .is-returning-time .venn-link--time {
+                animation-duration: 0.01ms;
+            }
+
+            .is-returning-observation .venn-circle--drug,
+            .is-returning-meditation .venn-circle--physics,
+            .is-returning-time .venn-circle--buddhism,
+            .is-returning-observation .venn-link,
+            .is-returning-meditation .venn-link,
+            .is-returning-time .venn-link {
+                transition-delay: 0s;
+            }
+        }
+    </style>
+</head>
+<body class="sunyata-page">
+    <main class="sunyata-main">
+        <a class="section-back-arrow" href="../menu_pages/fringe_science.html" aria-label="Back to fringe science">
+            <img src="../images/back_arrow_2.png" alt="">
+        </a>
+
+        <header class="science-material-header">
+            <p class="science-material-kicker">interactive &mdash;&nbsp;july 2026</p>
+            <h1 class="science-material-title">śūnyatā venn diagram</h1>
+        </header>
+
+        <figure id="venn-diagram" class="sunyata-figure">
+            <svg viewBox="0 0 900 790" role="img">
+                <title>śūnyatā venn diagarm</title>
+                <circle class="venn-circle venn-circle--buddhism" cx="450" cy="288" r="252" />
+                <circle class="venn-circle venn-circle--drug" cx="315" cy="500" r="252" />
+                <circle class="venn-circle venn-circle--physics" cx="585" cy="500" r="252" />
+
+                <g class="venn-label venn-label--domain">
+                    <!-- To restore these domain links, change data-disabled-href back to href and remove venn-link--disabled and aria-disabled. -->
+                    <a class="venn-link venn-link--buddhism venn-link--disabled" data-disabled-href="https://en.wikipedia.org/wiki/Buddhism" target="_blank" rel="noopener noreferrer" aria-label="Buddhism" aria-disabled="true">
+                        <text x="450" y="122">buddhism</text>
+                    </a>
+                    <a class="venn-link venn-link--drug venn-link--disabled" data-disabled-href="../references/on_hashish.html" aria-label="The drug experience" aria-disabled="true">
+                        <text x="230" y="625">
+                            <tspan x="230" dy="0">the drug</tspan>
+                            <tspan x="230" dy="31">experience</tspan>
+                        </text>
+                    </a>
+                    <a class="venn-link venn-link--physics venn-link--disabled" data-disabled-href="../menu_pages/science.html" aria-label="Physics" aria-disabled="true">
+                        <text x="670" y="650">physics</text>
+                    </a>
+                </g>
+
+                <g class="venn-label venn-label--overlap">
+                    <a id="meditation-control" class="venn-link venn-link--meditation" href="#" role="button" data-view="meditation" aria-label="Show the Buddhism and drug experience meditation diagram" aria-pressed="false">
+                        <text x="286" y="374">meditation</text>
+                    </a>
+                    <a id="observation-control" class="venn-link venn-link--observation" href="#" role="button" data-view="observation" aria-label="Show the Buddhism and physics observation diagram" aria-pressed="false">
+                        <text x="614" y="374">observation</text>
+                    </a>
+                    <a id="time-control" class="venn-link venn-link--time" href="#" role="button" data-view="time" aria-label="Show the drug experience and physics time dilation diagram" aria-pressed="false">
+                        <text x="450" y="608">
+                            <tspan x="450" dy="0">time</tspan>
+                            <tspan x="450" dy="23">dilation</tspan>
+                        </text>
+                    </a>
+                </g>
+
+                <g>
+                    <a class="venn-detail-link venn-detail-link--observation" href="https://www.dhamma.org/en/about/code#:~:text=It%20is%20a%20process,concentrate%20the%20mind." target="_blank" rel="noopener noreferrer" aria-label="Observation in Buddhism">
+                        <text class="venn-detail-text" x="200" y="430">observation in buddhism</text>
+                    </a>
+                    <a class="venn-detail-link venn-detail-link--observation" href="https://en.wikipedia.org/wiki/Observable" target="_blank" rel="noopener noreferrer" aria-label="Observation in physics">
+                        <text class="venn-detail-text" x="700" y="430">observation in physics</text>
+                    </a>
+
+                    <a class="venn-detail-link venn-detail-link--meditation" href="https://en.wikipedia.org/wiki/Buddhist_meditation" target="_blank" rel="noopener noreferrer" aria-label="Meditation in Buddhism">
+                        <text class="venn-detail-text" x="200" y="430">meditation in buddhism</text>
+                    </a>
+                    <a class="venn-detail-link venn-detail-link--meditation" href="materials/meditation_psychedelics_paper.pdf" target="_blank" rel="noopener noreferrer" aria-label="Meditation and psychedelics paper">
+                        <text class="venn-detail-text" x="700" y="420">
+                            <tspan x="700" dy="0">meditation in the</tspan>
+                            <tspan x="700" dy="23">drug experience</tspan>
+                        </text>
+                    </a>
+
+                    <a class="venn-detail-link venn-detail-link--time" href="materials/lsd_time_dilation.pdf" target="_blank" rel="noopener noreferrer" aria-label="LSD time dilation paper">
+                        <text class="venn-detail-text" x="200" y="420">
+                            <tspan x="200" dy="0">time dilation in</tspan>
+                            <tspan x="200" dy="23">the drug experience</tspan>
+                        </text>
+                    </a>
+                    <a class="venn-detail-link venn-detail-link--time" href="https://en.wikipedia.org/wiki/Time_dilation" target="_blank" rel="noopener noreferrer" aria-label="Time dilation in physics">
+                        <text class="venn-detail-text" x="700" y="430">time dilation in physics</text>
+                    </a>
+                </g>
+
+                <a class="venn-link venn-link--sunyata" href="#" role="button" aria-label="Śūnyatā" aria-pressed="false">
+                    <circle class="venn-sunyata-hit-target" cx="450" cy="456" r="252" aria-hidden="true" />
+                    <text class="venn-label venn-label--center" x="450" y="470">śūnyatā</text>
+                </a>
+            </svg>
+            <figcaption class="venn-see-also">
+                <span class="venn-see-also__item venn-see-also__item--observation">
+                    see also, <a href="../references/helgoland_rovelli.html"><em>helgoland</em></a>
+                </span>
+                <span class="venn-see-also__item venn-see-also__item--meditation">
+                    see also, <a href="../references/quantum_listening.html"><em>quantum listening</em></a>
+                </span>
+                <span class="venn-see-also__item venn-see-also__item--time">
+                    see also, <a href="../references/on_hashish.html"><em>on hashish</em></a>
+                </span>
+            </figcaption>
+        </figure>
+    </main>
+    <script>
+        const diagram = document.getElementById("venn-diagram");
+        const viewClasses = ["is-observation-view", "is-meditation-view", "is-time-view"];
+        const returnClasses = ["is-returning-observation", "is-returning-meditation", "is-returning-time"];
+        const viewControls = [...diagram.querySelectorAll("[data-view]")];
+        let returnTimer;
+        const sunyataLink = diagram.querySelector(".venn-link--sunyata");
+        const buddhismCircle = diagram.querySelector(".venn-circle--buddhism");
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const diagramHistoryStateKey = "coalescionSunyataVennView";
+        let sunyataState = "idle";
+
+        const saveDiagramView = (view) => {
+            const currentHistoryState = window.history.state && typeof window.history.state === "object"
+                ? window.history.state
+                : {};
+
+            window.history.replaceState({
+                ...currentHistoryState,
+                [diagramHistoryStateKey]: view
+            }, "");
+        };
+
+        const restoreDiagramView = () => {
+            const savedView = window.history.state?.[diagramHistoryStateKey];
+            const savedControl = viewControls.find((control) => control.dataset.view === savedView);
+
+            if (!savedControl) {
+                return;
+            }
+
+            diagram.classList.add(`is-${savedView}-view`);
+            savedControl.setAttribute("aria-pressed", "true");
+            savedControl.setAttribute("aria-label", "Return to the three-circle diagram");
+        };
+
+        const afterCircleMoves = (callback) => {
+            const handleTransitionEnd = (event) => {
+                if (event.propertyName !== "transform") {
+                    return;
+                }
+
+                buddhismCircle.removeEventListener("transitionend", handleTransitionEnd);
+                callback();
+            };
+
+            buddhismCircle.addEventListener("transitionend", handleTransitionEnd);
+        };
+
+        viewControls.forEach((control) => {
+            control.dataset.defaultLabel = control.getAttribute("aria-label");
+
+            control.addEventListener("click", (event) => {
+                event.preventDefault();
+
+                const viewClass = `is-${control.dataset.view}-view`;
+                const isAlreadyActive = diagram.classList.contains(viewClass);
+
+                window.clearTimeout(returnTimer);
+
+                if (isAlreadyActive) {
+                    const returnClass = `is-returning-${control.dataset.view}`;
+                    diagram.classList.add(returnClass);
+                    returnTimer = window.setTimeout(() => {
+                        diagram.classList.remove(returnClass);
+                    }, 2400);
+                } else {
+                    diagram.classList.remove(...returnClasses);
+                }
+
+                diagram.classList.remove(...viewClasses);
+                viewControls.forEach((item) => {
+                    item.setAttribute("aria-pressed", "false");
+                    item.setAttribute("aria-label", item.dataset.defaultLabel);
+                });
+
+                if (!isAlreadyActive) {
+                    diagram.classList.add(viewClass);
+                    control.setAttribute("aria-pressed", "true");
+                    control.setAttribute("aria-label", "Return to the three-circle diagram");
+                }
+
+                saveDiagramView(isAlreadyActive ? null : control.dataset.view);
+            });
+        });
+
+        restoreDiagramView();
+
+        sunyataLink.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            if (sunyataState === "animating" || sunyataState === "reversing") {
+                return;
+            }
+
+            if (sunyataState === "converged") {
+                const finishReverse = () => {
+                    sunyataState = "idle";
+                    diagram.classList.remove("is-sunyata-reversing");
+                    diagram.removeAttribute("aria-busy");
+                    sunyataLink.setAttribute("aria-label", "Śūnyatā");
+                    sunyataLink.setAttribute("aria-pressed", "false");
+                };
+
+                sunyataState = "reversing";
+                diagram.classList.add("is-sunyata-reversing");
+                diagram.classList.remove("is-sunyata-converged", "is-sunyata-transition");
+                diagram.setAttribute("aria-busy", "true");
+
+                if (prefersReducedMotion) {
+                    finishReverse();
+                } else {
+                    afterCircleMoves(finishReverse);
+                }
+
+                return;
+            }
+
+            const finishConvergence = () => {
+                sunyataState = "converged";
+                diagram.classList.add("is-sunyata-converged");
+                diagram.removeAttribute("aria-busy");
+                sunyataLink.setAttribute("aria-label", "Return to the three-circle diagram");
+                sunyataLink.setAttribute("aria-pressed", "true");
+            };
+
+            sunyataState = "animating";
+            diagram.classList.remove(...viewClasses);
+            saveDiagramView(null);
+            diagram.setAttribute("aria-busy", "true");
+
+            if (prefersReducedMotion) {
+                diagram.classList.add("is-sunyata-transition");
+                finishConvergence();
+                return;
+            }
+
+            afterCircleMoves(finishConvergence);
+            diagram.classList.add("is-sunyata-transition");
+        });
+    </script>
+</body>
+</html>

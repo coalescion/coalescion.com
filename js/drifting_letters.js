@@ -12,7 +12,7 @@
     lineStagger: 550,
     letterCascade: 450,
     letterJitter: 25,
-    minDuration: 1800,
+    minDuration: 1500,
     durationVariation: 300,
     logoDelay: 1000,
   };
