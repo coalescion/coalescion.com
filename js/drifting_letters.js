@@ -5,6 +5,14 @@
   const animatedSelector = `${headingSelector}, ${menuSelector}`;
   const skipHomeIntroStorageKey = "coalescionSkipHomeIntro";
 
+  // Drifting-letter speed knobs. Higher values drift faster; lower values
+  // drift slower. A value of 1 preserves the original animation speed.
+  const driftSpeeds = {
+    title: 0.7,   // "coalescion."
+    details: 0.8, // "the artistic project..." / "synonyms of a person..."
+    menu: 1,    // Main menu items
+  };
+
   const timing = {
     initialDelay: 350,
     menuDelay: 300,
@@ -162,6 +170,11 @@
   };
 
   const randomBetween = (min, max) => min + Math.random() * (max - min);
+
+  const durationAtSpeed = (duration, speed) => {
+    const safeSpeed = Number.isFinite(speed) && speed > 0 ? speed : 1;
+    return duration / safeSpeed;
+  };
 
   const rotationInDegrees = (element) => {
     const value = window.getComputedStyle(element).rotate;
@@ -437,7 +450,12 @@
     ];
   };
 
-  const animateGroup = async (lines, revealElements, groupDelay = 0) => {
+  const animateGroup = async (
+    lines,
+    revealElements,
+    groupDelay = 0,
+    speedForLine = () => 1
+  ) => {
     if (interrupted) {
       revealElements.forEach((element) => element.classList.remove("hidden"));
       return;
@@ -446,19 +464,24 @@
     const animations = lines.flatMap((line, lineIndex) => {
       const letters = splitIntoLetters(line);
       const lastLetterIndex = Math.max(letters.length - 1, 1);
+      const speed = speedForLine(line, lineIndex);
 
       return letters.map((letter, letterIndex) => letter.animate(
         keyframesFor(letter),
         {
-          delay: (
+          delay: durationAtSpeed(
             groupDelay
             + lineIndex * timing.lineStagger
             + (letterIndex / lastLetterIndex) * timing.letterCascade
-            + randomBetween(0, timing.letterJitter)
+            + randomBetween(0, timing.letterJitter),
+            speed
           ),
-          duration: randomBetween(
-            timing.minDuration,
-            timing.minDuration + timing.durationVariation
+          duration: durationAtSpeed(
+            randomBetween(
+              timing.minDuration,
+              timing.minDuration + timing.durationVariation
+            ),
+            speed
           ),
           easing: "cubic-bezier(0.22, 0.62, 0.28, 1)",
           fill: "backwards",
@@ -541,11 +564,28 @@
         Array.from(menu.querySelectorAll(".poem-line"))
       );
 
-      await animateGroup(headingElements, headingElements, timing.initialDelay);
+      await animateGroup(
+        headingElements,
+        headingElements,
+        timing.initialDelay,
+        (line) => (
+          line.matches("#descrip1")
+            ? driftSpeeds.title
+            : driftSpeeds.details
+        )
+      );
 
       if (!interrupted) {
-        await new Promise((resolve) => setTimeout(resolve, timing.menuDelay));
-        await animateGroup(menuLines, menuContainers);
+        await new Promise((resolve) => setTimeout(
+          resolve,
+          durationAtSpeed(timing.menuDelay, driftSpeeds.menu)
+        ));
+        await animateGroup(
+          menuLines,
+          menuContainers,
+          0,
+          () => driftSpeeds.menu
+        );
       }
 
       if (!interrupted) {

@@ -10,6 +10,8 @@
   --stay-posted-string-length: 56;
   --stay-posted-box-padding: 6;
   --stay-posted-font-size: 1rem;
+  /* Drawing drift speed in pixels per second; increase or decrease to taste. */
+  --drawings-drift-speed: 220;
   /* Pulse-speed knob: lower durations pulse faster. */
   --reference-cover-pulse-duration: 2s;
   /* Pulse-amplitude knob: larger values create a stronger size change. */
@@ -272,6 +274,365 @@ main {
 .in-progress-page .section-title {
   position: relative;
   z-index: 1;
+}
+
+.drawings-root,
+.drawings-page {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  width: 100%;
+}
+
+.drawings-page {
+  min-height: 100%;
+}
+
+.drawings-stage {
+  height: 100vh;
+  height: 100dvh;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  width: 100vw;
+}
+
+.drawings-field {
+  inset: 0;
+  opacity: 0;
+  overflow: visible;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 900ms ease;
+  z-index: 0;
+}
+
+.drawings-stage.is-field-visible .drawings-field {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawings-stage:not(.is-field-visible) .drawing-tile {
+  pointer-events: none;
+}
+
+.drawing-tile {
+  display: block;
+  height: auto;
+  left: 0;
+  max-width: none;
+  opacity: 1;
+  pointer-events: auto;
+  position: absolute;
+  top: 0;
+  transition: opacity 900ms ease;
+  user-select: none;
+  width: clamp(170px, 18vw, 320px);
+  will-change: transform;
+}
+
+.drawings-stage.is-drawing-expanded .drawing-tile {
+  opacity: 0.035;
+}
+
+.drawings-page .section-title {
+  background: var(--cream);
+  clip-path: polygon(
+    5px 0,
+    100% 0,
+    100% calc(100% - 5px),
+    calc(100% - 5px) calc(100% - 5px),
+    calc(100% - 5px) 100%,
+    0 100%,
+    0 5px,
+    5px 5px
+  );
+  left: clamp(1.25rem, 4vw, 5rem);
+  margin: 0;
+  padding: calc((var(--stay-posted-box-padding) * 1px) + 5px);
+  position: fixed;
+  top: clamp(1.25rem, 4vw, 5rem);
+  z-index: 20;
+}
+
+.drawings-page .home-back-arrow {
+  animation-duration: 360ms;
+  background: var(--cream);
+  clip-path: polygon(
+    5px 0,
+    100% 0,
+    100% calc(100% - 5px),
+    calc(100% - 5px) calc(100% - 5px),
+    calc(100% - 5px) 100%,
+    0 100%,
+    0 5px,
+    5px 5px
+  );
+  padding: calc((var(--stay-posted-box-padding) * 1px) + 5px);
+  position: fixed;
+  right: clamp(1.25rem, 4vw, 5rem);
+  top: clamp(1.25rem, 4vw, 5rem);
+  width: auto;
+  z-index: 20;
+}
+
+.drawings-page .home-back-arrow img {
+  position: relative;
+  width: clamp(2rem, 6vw, 3rem);
+  z-index: 1;
+}
+
+.drawings-page .section-title::before,
+.drawings-page .section-title::after,
+.drawings-page .home-back-arrow::before,
+.drawings-page .home-back-arrow::after {
+  border: 1px solid currentColor;
+  content: "";
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 260ms ease;
+}
+
+.drawings-page .section-title::before,
+.drawings-page .home-back-arrow::before {
+  inset: 0 0 5px 5px;
+}
+
+.drawings-page .section-title::after,
+.drawings-page .home-back-arrow::after {
+  inset: 5px 5px 0 0;
+}
+
+.drawings-stage.has-drawing-frames .section-title::before,
+.drawings-stage.has-drawing-frames .section-title::after,
+.drawings-stage.has-drawing-frames .home-back-arrow::before,
+.drawings-stage.has-drawing-frames .home-back-arrow::after {
+  opacity: 1;
+}
+
+.drawings-cursor {
+  height: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  transition: opacity 120ms ease;
+  width: 0;
+  will-change: transform;
+  z-index: 100;
+}
+
+.drawings-cursor::before,
+.drawings-cursor::after {
+  border-radius: 50%;
+  content: "";
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.drawings-cursor::before {
+  background: var(--ink);
+  border: 0 solid var(--ink);
+  height: 12px;
+  transition:
+    background-color 160ms ease,
+    border-width 160ms ease,
+    height 180ms ease,
+    width 180ms ease;
+  width: 12px;
+}
+
+.drawings-cursor::after {
+  background: var(--ink);
+  height: 7px;
+  opacity: 0;
+  transition: opacity 140ms ease;
+  width: 7px;
+}
+
+.drawings-cursor.is-over-drawing::before {
+  background: transparent;
+  border-width: 1.5px;
+  height: 58px;
+  width: 58px;
+}
+
+.drawings-cursor.is-over-drawing::after {
+  opacity: 1;
+}
+
+.drawings-cursor.is-visible {
+  opacity: 1;
+}
+
+.drawings-lightbox {
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  transition: opacity 650ms ease;
+  z-index: 40;
+}
+
+.drawings-lightbox.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawings-lightbox-dismiss {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  z-index: 0;
+}
+
+.drawings-lightbox-content {
+  align-items: center;
+  display: grid;
+  gap: clamp(2rem, 5vw, 5.5rem);
+  grid-template-columns: minmax(0, 1.15fr) minmax(15rem, 0.85fr);
+  left: 50%;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(90vw, 1120px);
+  z-index: 1;
+}
+
+.drawings-lightbox-image {
+  display: block;
+  height: auto;
+  justify-self: end;
+  max-height: 80vh;
+  max-height: 80dvh;
+  max-width: min(45vw, 620px);
+  object-fit: contain;
+  opacity: 0;
+  scale: 0.86;
+  transition:
+    opacity 650ms ease,
+    scale 800ms cubic-bezier(0.22, 0.62, 0.28, 1);
+  width: auto;
+}
+
+.drawings-lightbox.is-open .drawings-lightbox-image {
+  opacity: 1;
+  scale: 1;
+}
+
+.drawings-lightbox-metadata {
+  justify-self: center;
+  min-height: 12rem;
+  text-align: center;
+  width: min(100%, 24rem);
+}
+
+.drawings-lightbox-title,
+.drawings-lightbox-date,
+.drawings-lightbox-description {
+  font-weight: 400;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.drawings-lightbox-title {
+  font-size: clamp(1.3rem, 1.45vw, 1.75rem);
+  font-style: italic;
+  margin-bottom: 0.85rem;
+  margin-top: 0;
+}
+
+.drawings-lightbox-date {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  font-style: italic;
+  margin-bottom: 1.35rem;
+  margin-top: 0;
+}
+
+.drawings-lightbox-description {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.45;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.drawings-lightbox-description a {
+  font-style: italic;
+  pointer-events: auto;
+  text-decoration: none;
+}
+
+.drawings-lightbox-description a:hover,
+.drawings-lightbox-description a:focus-visible {
+  font-style: normal;
+  font-weight: 700;
+}
+
+.drawings-lightbox-title.is-typing::after,
+.drawings-lightbox-date.is-typing::after,
+.drawings-lightbox-description.is-typing::after {
+  animation: drawings-typewriter-caret 700ms step-end infinite;
+  content: "|";
+}
+
+@keyframes drawings-typewriter-caret {
+  0%,
+  45% {
+    opacity: 1;
+  }
+
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .drawings-lightbox-content {
+    gap: 1.35rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, auto) auto;
+    width: min(88vw, 34rem);
+  }
+
+  .drawings-lightbox-image {
+    justify-self: center;
+    max-height: 55vh;
+    max-height: 55dvh;
+    max-width: 78vw;
+  }
+
+  .drawings-lightbox-metadata {
+    min-height: 9.5rem;
+    width: min(84vw, 24rem);
+  }
+
+  .drawings-lightbox-title {
+    margin-bottom: 0.55rem;
+  }
+
+  .drawings-lightbox-date {
+    margin-bottom: 0.8rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .drawings-page,
+  .drawings-page * {
+    cursor: none !important;
+  }
 }
 
 .science-material-page {
@@ -975,6 +1336,39 @@ body.has-open-excerpt {
 
   .drift-letter {
     will-change: auto;
+  }
+
+  .drawings-page,
+  .drawings-page * {
+    cursor: auto !important;
+  }
+
+  .drawing-tile {
+    transition: none;
+    will-change: auto;
+  }
+
+  .drawings-field,
+  .drawings-page .section-title::before,
+  .drawings-page .section-title::after,
+  .drawings-page .home-back-arrow::before,
+  .drawings-page .home-back-arrow::after {
+    transition: none;
+  }
+
+  .drawings-cursor {
+    display: none;
+  }
+
+  .drawings-lightbox,
+  .drawings-lightbox-image {
+    transition: none;
+  }
+
+  .drawings-lightbox-title.is-typing::after,
+  .drawings-lightbox-date.is-typing::after,
+  .drawings-lightbox-description.is-typing::after {
+    animation: none;
   }
 
   .sliding-menu .poem-line a {

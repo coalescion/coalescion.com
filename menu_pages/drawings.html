@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="drawings-root">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,17 +9,41 @@
     <link rel="icon" type="image/png" sizes="96x96" href="../favicon.png">
     <link rel="stylesheet" href="../css/global_styles.css">
 </head>
-<body>
-    <main class="section-page in-progress-page">
+<body class="drawings-page">
+    <main class="drawings-stage" aria-labelledby="drawings-title">
+        <div class="drawings-field" data-drawings-field aria-hidden="true"></div>
         <a class="home-back-arrow hidden" href="../index.html" aria-label="Back to home">
             <img src="../images/back_arrow_2.png" alt="">
         </a>
-        <h1 class="section-title typewriter-title hidden">drawings.</h1>
-        <p class="in-progress"><em>in progress</em></p>
+        <h1 id="drawings-title" class="section-title typewriter-title hidden">drawings.</h1>
+        <div
+            class="drawings-lightbox"
+            data-drawings-lightbox
+            role="dialog"
+            aria-modal="true"
+            aria-label="Enlarged drawing"
+            hidden
+        >
+            <button
+                class="drawings-lightbox-dismiss"
+                data-drawings-lightbox-dismiss
+                type="button"
+                aria-label="Close enlarged drawing"
+            ></button>
+            <div class="drawings-lightbox-content">
+                <img class="drawings-lightbox-image" data-drawings-lightbox-image alt="">
+                <div class="drawings-lightbox-metadata">
+                    <h2 class="drawings-lightbox-title" data-drawings-lightbox-title></h2>
+                    <p class="drawings-lightbox-date" data-drawings-lightbox-date></p>
+                    <p class="drawings-lightbox-description" data-drawings-lightbox-description></p>
+                </div>
+            </div>
+        </div>
+        <div class="drawings-cursor" data-drawings-cursor aria-hidden="true"></div>
     </main>
     <script src="../js/title_spin.js"></script>
     <script src="../js/back_to_home.js"></script>
+    <script src="../js/drawings_drift.js"></script>
     <script src="../js/typewriter_effect.js"></script>
-    <script src="../js/in_progress_float.js"></script>
 </body>
 </html>
