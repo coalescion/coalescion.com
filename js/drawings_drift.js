@@ -34,16 +34,16 @@
       label: "",
       title: "over(lap)",
       date: "06.12.26",
-      description: "a sketch done at <a href=\"https://lightandsound.design/\" target=\"_blank\" rel=\"noopener noreferrer\">lightandsound.design</a>",
+      description: "a sketch done at <a href=\"https://lightandsound.design/\" target=\"_blank\" rel=\"noopener noreferrer\">lightandsound.design</a>, <br>brooklyn, new york",
     },
     {
       src: "../drawings/bushwick_film_col_drawing_display.webp",
       width: 738,
       height: 1200,
       label: "buchwick film collective drawing",
-      title: "infintesertion",
+      title: "\"infintesertion.\"",
       date: "6.9.26",
-      description: "a sketch done at bushwick film collective open screening.",
+      description: "a sketch done at bushwick film collective <br>open screening.",
     },
     {
       src: "../drawings/deep_listening_drawing_display.webp",
@@ -70,7 +70,7 @@
       label: "untitled 002",
       title: "untitled 002",
       date: "march 2026",
-      description: "while listening to <a href=\"https://blacktruffle.bandcamp.com/album/even-colder-spring\" target=\"_blank\" rel=\"noopener noreferrer\">ever colder spring</a>, cities aviv.",
+      description: "while listening to <a href=\"https://blacktruffle.bandcamp.com/album/even-colder-spring\" target=\"_blank\" rel=\"noopener noreferrer\">even colder spring</a>, cities aviv.",
     },
     {
       src: "../drawings/drawing_003_display.webp",
@@ -493,7 +493,7 @@
     const scaledDistance = (
       (distance - CENTER_DEAD_ZONE) / (1 - CENTER_DEAD_ZONE)
     );
-    const speed = MAX_POINTER_SPEED * Math.pow(scaledDistance, 1.35);
+    const speed = MAX_POINTER_SPEED * Math.pow(scaledDistance, 1.1);
     const directionLength = Math.hypot(normalizedX, normalizedY) || 1;
 
     targetVelocityX = -(normalizedX / directionLength) * speed;
