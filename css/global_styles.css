@@ -1298,8 +1298,12 @@ body.has-open-excerpt {
   }
 
   .site-details {
-    font-size: var(--mobile-details-font-size, 2.5rem);
+    font-size: var(--mobile-details-font-size, 1.1rem);
     white-space: nowrap;
+  }
+
+  #descrip3.is-oscillating {
+    --synonyms-oscillation-duration: 14s;
   }
 
   .poem-line {
