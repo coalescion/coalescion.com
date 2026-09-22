@@ -16,6 +16,8 @@
   --reference-cover-pulse-duration: 2s;
   /* Pulse-amplitude knob: larger values create a stronger size change. */
   --reference-cover-pulse-amplitude: 0.04;
+  /* Synonyms speed knob: lower durations move the phrase faster. */
+  --synonyms-oscillation-duration: 17s;
 }
 
 * {
@@ -28,6 +30,10 @@ body {
   background-color: var(--cream);
   color: var(--ink);
   font-family: "Times New Roman", Times, serif;
+}
+
+.home-page {
+  overflow-x: hidden;
 }
 
 .poetry-page {
@@ -193,6 +199,36 @@ main {
   margin-bottom: 1rem;
 }
 
+#descrip3 {
+  margin-inline: auto;
+  max-width: none;
+  width: max-content;
+  white-space: nowrap;
+}
+
+#descrip3.is-oscillating {
+  animation: synonyms-edge-bounce var(--synonyms-oscillation-duration) linear infinite;
+  will-change: transform;
+}
+
+@keyframes synonyms-edge-bounce {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(var(--synonyms-edge-travel, 0px));
+  }
+
+  75% {
+    transform: translateX(calc(0px - var(--synonyms-edge-travel, 0px)));
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
 .synonyms-link:hover em,
 .synonyms-link:focus-visible em {
   font-style: normal;
@@ -222,6 +258,11 @@ main {
 
 .poem-line--two-line a {
   line-height: 1.15;
+}
+
+.poem-title-blur {
+  display: inline-block;
+  filter: blur(5.7px);
 }
 
 .poem-line a:hover,
@@ -1304,6 +1345,11 @@ body.has-open-excerpt {
 
   .site-logo.is-rotating,
   .reference-cover.is-rotating {
+    animation: none;
+    will-change: auto;
+  }
+
+  #descrip3.is-oscillating {
     animation: none;
     will-change: auto;
   }

@@ -10,7 +10,7 @@
   const driftSpeeds = {
     title: 0.7,   // "coalescion."
     details: 0.8, // "the artistic project..." / "synonyms of a person..."
-    menu: 1,    // Main menu items
+    menu: 0.9,  // Main menu items
   };
 
   const timing = {
@@ -23,6 +23,7 @@
     minDuration: 1500,
     durationVariation: 300,
     logoDelay: 1000,
+    synonymsDelayAfterLogo: 500,
   };
 
   const logoSpin = {
@@ -131,6 +132,7 @@
         resizeFrame = null;
         fitMobileMenu();
         fitMobileDetails();
+        updateSynonymsTravelDistance();
       });
     };
 
@@ -343,6 +345,34 @@
     });
   };
 
+  const updateSynonymsTravelDistance = () => {
+    const phrase = document.querySelector("#descrip3");
+    const menu = document.querySelector(".poem-menu");
+
+    if (!phrase || !menu) {
+      return;
+    }
+
+    const travelDistance = Math.max(
+      0,
+      (menu.getBoundingClientRect().width - phrase.getBoundingClientRect().width) / 2
+    );
+
+    phrase.style.setProperty("--synonyms-edge-travel", `${travelDistance}px`);
+  };
+
+  const startSynonymsOscillation = () => {
+    updateSynonymsTravelDistance();
+    document.querySelector("#descrip3")?.classList.add("is-oscillating");
+  };
+
+  const startSynonymsAfterLogo = () => {
+    window.setTimeout(
+      startSynonymsOscillation,
+      timing.synonymsDelayAfterLogo
+    );
+  };
+
   const collectTextNodes = (element) => {
     const walker = document.createTreeWalker(
       element,
@@ -522,6 +552,8 @@
         logo.classList.add("is-rotating");
       });
     }
+
+    startSynonymsAfterLogo();
   };
 
   document.querySelector(menuSelector)?.addEventListener("click", (event) => {
@@ -547,6 +579,7 @@
 
     if (reducedMotion.matches || typeof Element.prototype.animate !== "function") {
       revealAll();
+      startSynonymsOscillation();
       return;
     }
 
@@ -595,10 +628,16 @@
             logo.classList.add("is-rotating");
           });
         }
+        await new Promise((resolve) => setTimeout(
+          resolve,
+          timing.synonymsDelayAfterLogo
+        ));
+        startSynonymsOscillation();
       }
     } catch (error) {
       console.error("Drifting letters animation could not complete.", error);
       finishImmediately();
+      startSynonymsOscillation();
     }
   };
 

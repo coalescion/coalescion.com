@@ -43,3 +43,17 @@ Write cleaned copies to a separate folder:
 ```sh
 python3 scripts/remove_svg_background.py --output-dir /tmp/clean-svgs poems/poem_svgs
 ```
+
+## Collage Poetry Flipbook Assets
+
+Source PDFs and blur manifests for the collage poetry flipbooks live in the ignored
+`sound_collage/collage_poetry_series/source/` directory. Rebuild the public,
+flattened PNG pages with:
+
+```sh
+python3 scripts/build_collage_poetry_flipbooks.py sound_collage/collage_poetry_series/source/blur-manifest.json
+```
+
+The builder validates every requested text match before rendering any book and
+defaults to 220 PPI. Only the generated per-series page directories should be
+committed or deployed.

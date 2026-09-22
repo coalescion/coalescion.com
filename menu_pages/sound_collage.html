@@ -8,6 +8,84 @@
     <link rel="canonical" href="https://coalescion.com/menu_pages/sound_collage.html">
     <link rel="icon" type="image/png" sizes="96x96" href="../favicon.png">
     <link rel="stylesheet" href="../css/global_styles.css">
+    <style>
+        .in-progress-page .sound-collage-entry {
+            --sound-collage-outline-width: 0.7;
+            align-items: center;
+            display: grid;
+            justify-items: center;
+            padding: 1.5rem;
+        }
+
+        .in-progress-page .sound-collage-entry--hexagon {
+            aspect-ratio: 2 / 1.7320508076;
+            height: auto;
+            width: min(16rem, calc(100vw - 3rem));
+        }
+
+        .in-progress-page .sound-collage-entry--rectangle {
+            cursor: default;
+            height: 3.5rem;
+            max-width: calc(100vw - 3rem);
+            padding: 0.75rem 1rem;
+            width: max-content;
+        }
+
+        .sound-collage-entry-text {
+            position: relative;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .sound-collage-outline {
+            fill: none;
+            height: 100%;
+            inset: 0;
+            overflow: visible;
+            pointer-events: none;
+            position: absolute;
+            stroke: currentColor;
+            stroke-width: var(--sound-collage-outline-width);
+            width: 100%;
+        }
+
+        .sound-collage-outline--offset {
+            transform: rotate(10deg);
+            transform-origin: center;
+        }
+        .sound-collage-outline--offset2 {
+            transform: rotate(20deg);
+            transform-origin: center;
+        }
+        .sound-collage-outline--offset3 {
+            transform: rotate(-10deg);
+            transform-origin: center;
+        }
+
+        .sound-collage-entry--rectangle .sound-collage-outline--offset {
+            transform: rotate(4deg);
+        }
+
+        .sound-collage-entry--rectangle .sound-collage-outline--offset2 {
+            transform: rotate(8deg);
+        }
+
+        .sound-collage-entry--rectangle .sound-collage-outline--offset3 {
+            transform: rotate(-4deg);
+        }
+
+        .sound-collage-entry--farewell .sound-collage-outline--offset {
+            transform: rotate(2.5deg);
+        }
+
+        .sound-collage-entry--farewell .sound-collage-outline--offset2 {
+            transform: rotate(5deg);
+        }
+
+        .sound-collage-entry--farewell .sound-collage-outline--offset3 {
+            transform: rotate(-2.5deg);
+        }
+    </style>
 </head>
 <body>
     <main class="section-page in-progress-page">
@@ -15,11 +93,55 @@
             <img src="../images/back_arrow_2.png" alt="">
         </a>
         <h1 class="section-title typewriter-title hidden">sound collage.</h1>
-        <p class="in-progress"><em>coming soon</em></p>
+        <a class="in-progress sound-collage-entry sound-collage-entry--hexagon" href="../sound_collage/soap.html">
+            <svg class="sound-collage-outline" viewBox="0 0 100 86.6025" preserveAspectRatio="none" aria-hidden="true">
+                <polygon points="25,0 75,0 100,43.30125 75,86.6025 25,86.6025 0,43.30125"></polygon>
+            </svg>
+            <svg class="sound-collage-outline sound-collage-outline--offset" viewBox="0 0 100 86.6025" preserveAspectRatio="none" aria-hidden="true">
+                <polygon points="25,0 75,0 100,43.30125 75,86.6025 25,86.6025 0,43.30125"></polygon>
+            </svg>
+            <svg class="sound-collage-outline sound-collage-outline--offset2" viewBox="0 0 100 86.6025" preserveAspectRatio="none" aria-hidden="true">
+                <polygon points="25,0 75,0 100,43.30125 75,86.6025 25,86.6025 0,43.30125"></polygon>
+            </svg>
+            <svg class="sound-collage-outline sound-collage-outline--offset3" viewBox="0 0 100 86.6025" preserveAspectRatio="none" aria-hidden="true">
+                <polygon points="25,0 75,0 100,43.30125 75,86.6025 25,86.6025 0,43.30125"></polygon>
+            </svg>
+            <em class="sound-collage-entry-text">synonyms of a person</em>
+        </a>
+        <div class="in-progress sound-collage-entry sound-collage-entry--rectangle sound-collage-entry--farewell">
+            <svg class="sound-collage-outline" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                <rect x="1" y="1" width="98" height="38"></rect>
+            </svg>
+            <svg class="sound-collage-outline sound-collage-outline--offset" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                <rect x="1" y="1" width="98" height="38"></rect>
+            </svg>
+            <svg class="sound-collage-outline sound-collage-outline--offset2" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                <rect x="1" y="1" width="98" height="38"></rect>
+            </svg>
+            <svg class="sound-collage-outline sound-collage-outline--offset3" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                <rect x="1" y="1" width="98" height="38"></rect>
+            </svg>
+            <em class="sound-collage-entry-text">(in)coherent farwell</em>
+        </div>
+        <div class="in-progress sound-collage-entry sound-collage-entry--rectangle">
+            <svg class="sound-collage-outline" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                <rect x="1" y="1" width="98" height="38"></rect>
+            </svg>
+            <svg class="sound-collage-outline sound-collage-outline--offset" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                <rect x="1" y="1" width="98" height="38"></rect>
+            </svg>
+            <svg class="sound-collage-outline sound-collage-outline--offset2" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                <rect x="1" y="1" width="98" height="38"></rect>
+            </svg>
+            <svg class="sound-collage-outline sound-collage-outline--offset3" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                <rect x="1" y="1" width="98" height="38"></rect>
+            </svg>
+            <em class="sound-collage-entry-text">hightalk</em>
+        </div>
     </main>
     <script src="../js/title_spin.js"></script>
     <script src="../js/back_to_home.js"></script>
     <script src="../js/typewriter_effect.js"></script>
-    <script src="../js/in_progress_float.js"></script>
+    <script src="../js/sound_collage_float.js"></script>
 </body>
 </html>

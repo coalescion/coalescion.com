@@ -6,6 +6,8 @@
     return;
   }
 
+  const isLink = floater.matches("a[href]");
+
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const fallbackSpeed = 42;
   const fallbackBobDistance = 18;
@@ -93,6 +95,10 @@
   };
 
   const setupCompanion = () => {
+    if (isLink) {
+      return;
+    }
+
     inProgressAnchor = wrapAnchorCharacter(
       floater,
       "g",
@@ -334,15 +340,17 @@
     positionCompanion();
   };
 
-  floater.addEventListener("click", toggleCompanion);
-  floater.addEventListener("keydown", (event) => {
-    if (event.key !== "Enter" && event.key !== " ") {
-      return;
-    }
+  if (!isLink) {
+    floater.addEventListener("click", toggleCompanion);
+    floater.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
 
-    event.preventDefault();
-    toggleCompanion();
-  });
+      event.preventDefault();
+      toggleCompanion();
+    });
+  }
 
   window.addEventListener("resize", () => {
     measureBounds();

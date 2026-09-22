@@ -9,9 +9,14 @@
     deceleration: 0,
     lastFrameTime: null,
     animationFrame: null,
+    idleTimer: null,
+    returningToUpright: false,
+    returnDegreesRemaining: 0,
     clickImpulse: 1.5,
     clickImpulseVariation: 0.16,
     slowdownDuration: 3000,
+    idleDuration: 1500,
+    returnVelocity: 360 / 9000,
   });
 
   const stateFor = (title) => {
@@ -70,6 +75,67 @@
     state.angle %= 360;
     state.lastFrameTime = null;
     state.animationFrame = null;
+    state.idleTimer = window.setTimeout(() => {
+      state.idleTimer = null;
+      returnToUpright(title, state);
+    }, state.idleDuration);
+  };
+
+  const animateReturnToUpright = (title, state, currentTime) => {
+    if (state.lastFrameTime === null) {
+      state.lastFrameTime = currentTime;
+    }
+
+    const elapsed = Math.min(currentTime - state.lastFrameTime, 50);
+    const rotationStep = Math.min(
+      state.returnVelocity * elapsed,
+      state.returnDegreesRemaining
+    );
+
+    state.angle += rotationStep;
+    state.returnDegreesRemaining -= rotationStep;
+    state.lastFrameTime = currentTime;
+    title.style.rotate = `${state.angle % 360}deg`;
+
+    if (state.returnDegreesRemaining > 0.01) {
+      state.animationFrame = window.requestAnimationFrame((time) => {
+        animateReturnToUpright(title, state, time);
+      });
+      return;
+    }
+
+    state.angle = 0;
+    state.returningToUpright = false;
+    state.lastFrameTime = null;
+    state.animationFrame = null;
+    title.style.rotate = "0deg";
+  };
+
+  const returnToUpright = (title, state) => {
+    if (state.animationFrame !== null) {
+      window.cancelAnimationFrame(state.animationFrame);
+      state.animationFrame = null;
+    }
+
+    const normalizedAngle = ((state.angle % 360) + 360) % 360;
+
+    state.velocity = 0;
+    state.deceleration = 0;
+    state.angle = normalizedAngle;
+    state.returnDegreesRemaining = (360 - normalizedAngle) % 360;
+    state.returningToUpright = true;
+    state.lastFrameTime = null;
+
+    if (state.returnDegreesRemaining < 0.01) {
+      state.angle = 0;
+      state.returningToUpright = false;
+      title.style.rotate = "0deg";
+      return;
+    }
+
+    state.animationFrame = window.requestAnimationFrame((time) => {
+      animateReturnToUpright(title, state, time);
+    });
   };
 
   const spinTitleFromClick = (title) => {
@@ -78,6 +144,22 @@
     }
 
     const state = stateFor(title);
+
+    if (state.idleTimer !== null) {
+      window.clearTimeout(state.idleTimer);
+      state.idleTimer = null;
+    }
+
+    if (state.returningToUpright) {
+      if (state.animationFrame !== null) {
+        window.cancelAnimationFrame(state.animationFrame);
+        state.animationFrame = null;
+      }
+
+      state.angle = rotationInDegrees(title, state);
+      state.returningToUpright = false;
+      state.lastFrameTime = null;
+    }
 
     if (state.animationFrame === null) {
       state.angle = rotationInDegrees(title, state);
@@ -106,9 +188,18 @@
       state.animationFrame = null;
     }
 
+    if (state.idleTimer !== null) {
+      window.clearTimeout(state.idleTimer);
+      state.idleTimer = null;
+    }
+
     state.velocity = 0;
     state.deceleration = 0;
+    state.angle = 0;
+    state.returnDegreesRemaining = 0;
+    state.returningToUpright = false;
     state.lastFrameTime = null;
+    title.style.rotate = "0deg";
   };
 
   const setupTitleInteraction = () => {

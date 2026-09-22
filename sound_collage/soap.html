@@ -1,0 +1,2331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>synonyms of a person &mdash; coalescion.</title>
+    <meta name="description" content="Synonyms of a Person, a two-part sound collage by coalescion.">
+    <link rel="canonical" href="https://coalescion.com/sound_collage/soap.html">
+    <link rel="icon" type="image/png" sizes="96x96" href="../favicon.png">
+    <link rel="stylesheet" href="../css/global_styles.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mux/mux-player"></script>
+    <style>
+        .collage-description {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin: 0 1rem 1.5rem;
+        }
+
+        .viewing-note {
+            /* margin: 0 2.1rem 1rem; */
+            text-align: left;
+        }
+
+        .viewing-note-trigger {
+            appearance: none;
+            background: transparent;
+            border: 0;
+            color: inherit;
+            cursor: pointer;
+            font: inherit;
+            /* padding: 0.35rem 0.5rem; */
+        }
+
+        .viewing-note-trigger span {
+            display: inline-block;
+            transition: transform 450ms ease;
+        }
+
+        .viewing-note-trigger[aria-expanded="true"] span {
+            transform: rotate(180deg);
+        }
+
+        .viewing-note-trigger:focus-visible {
+            outline: 1px solid currentColor;
+            outline-offset: 0.2em;
+        }
+
+        .viewing-note-popup {
+            border: 1px solid currentColor;
+            box-sizing: border-box;
+            display: block;
+            font-size: 0.9rem;
+            left: 50%;
+            line-height: 1.35;
+            margin-left: 0;
+            margin-right: 0;
+            max-width: calc(100vw - 3rem);
+            padding: 0.75rem 0.75rem;
+            position: relative;
+            text-align: center;
+            transform: translateX(-50%);
+            width: max-content;
+        }
+
+        .viewing-note-popup-line {
+            display: block;
+        }
+
+        .viewing-note-popup[hidden] {
+            display: none;
+        }
+
+        .collage-section-title {
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin: 0 0 0.5rem;
+        }
+
+        .collage-section-trigger {
+            appearance: none;
+            background: transparent;
+            border: 0;
+            color: inherit;
+            cursor: pointer;
+            font: inherit;
+            padding: 0;
+            text-align: inherit;
+        }
+
+        .collage-section-trigger[aria-expanded="true"] {
+            font-style: italic;
+        }
+
+        .collage-section-trigger:focus-visible {
+            outline: 1px solid currentColor;
+            outline-offset: 0.2em;
+        }
+
+        .collage-section-panel[hidden] {
+            display: none;
+        }
+
+        .collage-section-panel:not([hidden]) {
+            padding-bottom: 0.75rem;
+        }
+
+        .collage-part {
+            margin-bottom: 2.5rem;
+        }
+
+        .collage-part h3 {
+            font-size: 1.4rem;
+            font-weight: 400;
+            text-align: center;
+        }
+        
+        .collage-film-heading h2{
+            font-size: 10rem;
+            font-weight: 400;
+        }
+
+        .collage-audio {
+            margin-top: var(--collage-heading-spacing, 2rem);
+        }
+
+        .bandcamp-releases {
+            margin-top: 1.25rem;
+        }
+
+        .bandcamp-intro,
+        .bandcamp-catalog-link {
+            font-size: 0.95rem;
+            line-height: 1.45;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        .bandcamp-intro {
+            margin-bottom: 1.75rem;
+            margin-top: 0;
+            max-width: 32rem;
+        }
+
+        .bandcamp-release-grid {
+            display: grid;
+            gap: 1.75rem clamp(1.4rem, 4vw, 2.6rem);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .bandcamp-release {
+            margin: 0;
+            min-width: 0;
+            text-align: center;
+        }
+
+        .bandcamp-release--part-i {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .bandcamp-release--part-ii {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .bandcamp-release-select {
+            --bandcamp-card-tilt: -0.65deg;
+            appearance: none;
+            background: transparent;
+            border: 0;
+            color: inherit;
+            cursor: pointer;
+            display: block;
+            font: inherit;
+            padding: 0.45rem;
+            width: 100%;
+        }
+
+        .bandcamp-release--part-ii .bandcamp-release-select {
+            --bandcamp-card-tilt: 0.65deg;
+        }
+
+        .bandcamp-release-select:focus-visible {
+            outline: 1px solid currentColor;
+            outline-offset: 0.25rem;
+        }
+
+        .bandcamp-release-artwork-frame {
+            --bandcamp-artwork-border-gap: 5px;
+            display: block;
+            margin: 0.4rem 0.4rem 1rem;
+            position: relative;
+            transition: transform 260ms ease;
+        }
+
+        .bandcamp-release-artwork-frame::before {
+            border: 1px solid #000;
+            content: "";
+            inset: calc(0px - var(--bandcamp-artwork-border-gap));
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .bandcamp-release-artwork {
+            aspect-ratio: 1;
+            display: block;
+            height: auto;
+            object-fit: cover;
+            position: relative;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .bandcamp-release-select:hover .bandcamp-release-artwork-frame,
+        .bandcamp-release-select:focus-visible .bandcamp-release-artwork-frame,
+        .bandcamp-release-select[aria-expanded="true"] .bandcamp-release-artwork-frame {
+            transform: rotate(var(--bandcamp-card-tilt)) translateY(-0.35rem);
+        }
+
+        .bandcamp-release-part,
+        .bandcamp-release-action {
+            display: block;
+        }
+
+        .bandcamp-release-part {
+            font-size: 1.15rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .bandcamp-release-action {
+            font-size: 0.9rem;
+        }
+
+        .bandcamp-release-select[aria-expanded="true"] .bandcamp-release-action {
+            font-style: italic;
+        }
+
+        .bandcamp-support-link,
+        .bandcamp-catalog-link a {
+            display: inline-block;
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 0.2em;
+        }
+
+        .bandcamp-support-link {
+            font-size: 0.9rem;
+            margin-top: 0.4rem;
+        }
+
+        .bandcamp-support-link:hover,
+        .bandcamp-support-link:focus-visible,
+        .bandcamp-catalog-link a:hover,
+        .bandcamp-catalog-link a:focus-visible {
+            font-style: italic;
+        }
+
+        .bandcamp-support-link:focus-visible,
+        .bandcamp-catalog-link a:focus-visible {
+            outline: 1px solid currentColor;
+            outline-offset: 0.25rem;
+        }
+
+        .bandcamp-player-region {
+            border-bottom: 1px solid currentColor;
+            border-top: 1px solid currentColor;
+            grid-column: 1 / -1;
+            grid-row: 2;
+            padding: 1rem 0;
+        }
+
+        .bandcamp-player {
+            background: var(--cream);
+            border: 0;
+            display: block;
+            height: 340px;
+            width: 100%;
+        }
+
+        .bandcamp-catalog-link {
+            margin-bottom: 0;
+            margin-top: 1.5rem;
+        }
+
+        .performance-grid {
+            /* Gallery back-arrow size knob. */
+            --performance-back-arrow-size: clamp(1rem, 2.8vw, 2rem);
+            --performance-back-arrow-padding: 3px;
+            --performance-back-arrow-layer-offset: 1.5px;
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            margin-top: 1.25rem;
+        }
+
+        .performance-item {
+            cursor: pointer;
+            margin: 0;
+            min-width: 0;
+            position: relative;
+        }
+
+        .performance-item:focus-visible {
+            outline: 1px solid currentColor;
+            outline-offset: 0.3rem;
+        }
+
+        .performance-grid.has-expanded-item .performance-item:not(.is-expanded) {
+            display: none;
+        }
+
+        .performance-grid.has-expanded-item .performance-item.is-expanded {
+            cursor: default;
+            grid-column: 1 / -1;
+        }
+
+        .performance-close {
+            appearance: none;
+            background: var(--cream);
+            border: 0;
+            clip-path: polygon(
+                var(--performance-back-arrow-layer-offset) 0,
+                100% 0,
+                100% calc(100% - var(--performance-back-arrow-layer-offset)),
+                calc(100% - var(--performance-back-arrow-layer-offset)) calc(100% - var(--performance-back-arrow-layer-offset)),
+                calc(100% - var(--performance-back-arrow-layer-offset)) 100%,
+                0 100%,
+                0 var(--performance-back-arrow-layer-offset),
+                var(--performance-back-arrow-layer-offset) var(--performance-back-arrow-layer-offset)
+            );
+            color: inherit;
+            cursor: pointer;
+            padding: var(--performance-back-arrow-padding);
+            position: absolute;
+            right: 0.65rem;
+            top: 0.65rem;
+            width: auto;
+            z-index: 30;
+        }
+
+        .performance-close::before,
+        .performance-close::after {
+            border: 1px solid currentColor;
+            content: "";
+            opacity: 1;
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .performance-close::before {
+            inset: 0 0 var(--performance-back-arrow-layer-offset) var(--performance-back-arrow-layer-offset);
+        }
+
+        .performance-close::after {
+            inset: var(--performance-back-arrow-layer-offset) var(--performance-back-arrow-layer-offset) 0 0;
+        }
+
+        .performance-close img {
+            display: block;
+            height: auto;
+            position: relative;
+            rotate: -10deg;
+            width: var(--performance-back-arrow-size);
+            z-index: 1;
+        }
+
+        .performance-close:focus-visible {
+            outline: 1px solid currentColor;
+            outline-offset: 0.25rem;
+        }
+
+        .performance-media,
+        .performance-stack {
+            aspect-ratio: 4 / 3;
+            background: #111;
+            display: block;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .performance-media {
+            height: auto;
+            object-fit: contain;
+        }
+
+        video.performance-media {
+            height: auto;
+        }
+
+        .performance-stack {
+            appearance: none;
+            border: 0;
+            color: inherit;
+            cursor: pointer;
+            font: inherit;
+            padding: 0;
+            position: relative;
+        }
+
+        .performance-stack::after {
+            background: var(--cream);
+            bottom: 0.45rem;
+            content: attr(data-stack-status);
+            font-size: 0.8rem;
+            line-height: 1;
+            padding: 0.3rem 0.4rem;
+            position: absolute;
+            right: 0.45rem;
+            z-index: 20;
+        }
+
+        .performance-stack img {
+            background: #111;
+            height: calc(100% - 1.15rem);
+            left: 0.15rem;
+            object-fit: contain;
+            position: absolute;
+            top: 0.15rem;
+            transform: translate(calc(var(--stack-position) * 0.22rem), calc(var(--stack-position) * 0.22rem));
+            transition: opacity 250ms ease, transform 250ms ease;
+            width: calc(100% - 1.15rem);
+        }
+
+        .performance-stack:hover img:first-child,
+        .performance-stack:focus-visible img:first-child {
+            transform: translate(-0.1rem, -0.1rem) rotate(-0.5deg);
+        }
+
+        .performance-stack:focus-visible {
+            outline: 1px solid currentColor;
+            outline-offset: 0.3rem;
+        }
+
+        .collage-player {
+            aspect-ratio: 16 / 9;
+            position: relative;
+        }
+
+        .collage-player mux-player {
+            --media-primary-color: #f9e4bc;
+            --media-secondary-color: #000;
+            --media-accent-color: #000;
+            --controls-backdrop-color: transparent;
+            --time-display: none;
+            --duration-display: none;
+            --playback-rate-button: none;
+            --pip-button: none;
+            border: 0;
+            height: 100%;
+            inset: 0;
+            position: absolute;
+            width: 100%;
+        }
+
+        .collage-player mux-player::part(control-bar) {
+            --media-control-background: transparent;
+        }
+
+        .collage-player mux-player::part(control-bar)::before {
+            background: none;
+        }
+
+        .collage-player mux-player::part(time range) {
+            --media-range-track-background: #343434;
+            --media-time-range-buffered-color: #343434;
+            --media-range-bar-color: var(--cream);
+        }
+
+        .episode-season {
+            margin-top: 1.25rem;
+        }
+
+        .episode-season-title {
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin: 0 0 0.8rem;
+            text-align: center;
+        }
+
+        .episode-season + .episode-season {
+            margin-top: 3rem;
+        }
+
+        .episode-carousel {
+            position: relative;
+        }
+
+        .episode-carousel-viewport {
+            overflow-x: auto;
+            overflow-y: hidden;
+            overscroll-behavior-inline: contain;
+            padding: 0.75rem 0.35rem 1.2rem;
+            scroll-behavior: smooth;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+        }
+
+        .episode-carousel.is-enhanced .episode-carousel-viewport {
+            scrollbar-width: none;
+        }
+
+        .episode-carousel.is-enhanced .episode-carousel-viewport::-webkit-scrollbar {
+            display: none;
+        }
+
+        .episode-carousel-track {
+            align-items: center;
+            display: flex;
+            gap: clamp(0.8rem, 2vw, 1.35rem);
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .episode-card {
+            --program-lock-offset-y: 0;
+            --program-lock-width: clamp(2.25rem, 7vw, 3.75rem);
+            flex: 0 0 clamp(16rem, 34vw, 26rem);
+            margin: 0;
+            min-width: 0;
+            opacity: 0.48;
+            scroll-snap-align: center;
+            transform: scale(0.94);
+            transition: opacity 280ms ease, transform 280ms ease;
+        }
+
+        .episode-card.is-selected {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .episode-card mux-player {
+            --seek-backward-button: block;
+            --seek-forward-button: block;
+        }
+
+        .episode-card mux-player::part(center play button) {
+            display: none;
+        }
+
+        #episodes-panel[data-episode-access="locked"] .episode-card mux-player {
+            pointer-events: none;
+        }
+
+        .episode-card:focus-visible {
+            outline: none;
+        }
+
+        .episode-card h4 {
+            font-size: 1rem;
+            font-weight: 400;
+            margin: 0 0 0.55rem;
+            text-align: left;
+        }
+
+        .episode-carousel-control {
+            align-items: center;
+            appearance: none;
+            background: rgba(249, 228, 188, 0.92);
+            border: 1px solid currentColor;
+            color: inherit;
+            cursor: pointer;
+            display: none;
+            font: inherit;
+            font-size: 1.6rem;
+            height: 3rem;
+            justify-content: center;
+            line-height: 1;
+            padding: 0;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-35%);
+            width: 2.4rem;
+            z-index: 10;
+        }
+
+        .episode-carousel-control img {
+            display: block;
+            height: auto;
+            rotate: -10deg;
+            width: clamp(1rem, 2.8vw, 2rem);
+        }
+
+        .episode-carousel-control--next img {
+            transform: rotate(180deg);
+        }
+
+        .episode-carousel.is-enhanced .episode-carousel-control {
+            display: flex;
+        }
+
+        .episode-carousel-control--previous {
+            left: -1rem;
+        }
+
+        .episode-carousel-control--next {
+            right: -1rem;
+        }
+
+        .episode-carousel-control:disabled {
+            cursor: default;
+            opacity: 0.28;
+        }
+
+        .episode-carousel-control:focus-visible {
+            outline: 1px solid currentColor;
+            outline-offset: 0.2rem;
+        }
+
+        .episode-description {
+            font-size: 0.85rem;
+            filter: blur(0);
+            line-height: 1.4;
+            margin: 0.65rem 0 0;
+            min-height: 2.8em;
+            text-align: left;
+            transition: filter 300ms ease;
+        }
+
+        #episodes-panel[data-episode-access="locked"] .episode-description {
+            filter: blur(4.5px);
+            pointer-events: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .episode-password-form {
+            font-size: clamp(0.72rem, 2vw, 0.9rem);
+            padding: clamp(0.75rem, 3vw, 1.25rem);
+            width: min(20rem, calc(100% - 1rem));
+        }
+
+        .episode-carousel-status {
+            clip: rect(0 0 0 0);
+            clip-path: inset(50%);
+            height: 1px;
+            overflow: hidden;
+            position: absolute;
+            white-space: nowrap;
+            width: 1px;
+        }
+
+        .program-access {
+            /* Lock appearance knobs: adjust size and vertical placement here. */
+            --program-lock-offset-y: -0.95rem;
+            --program-lock-width: clamp(2.25rem, 7vw, 3.75rem);
+            margin: 2.5rem auto 0;
+            max-width: 52rem;
+            position: relative;
+        }
+
+        .program-pamphlet {
+            margin: 0;
+            outline: none;
+            text-align: center;
+        }
+
+        .program-lock-overlay {
+            align-items: center;
+            display: flex;
+            inset: 0;
+            justify-content: center;
+            position: absolute;
+            z-index: 20;
+        }
+
+        .program-lock-options {
+            align-items: center;
+            display: grid;
+            gap: 0.1rem;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+            inset: 0;
+            position: absolute;
+        }
+
+        .program-lock-button--assorted {
+            --program-lock-shift-x: 0.9rem;
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .program-lock-button--program {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .program-lock-button--needle {
+            --program-lock-shift-x: -0.9rem;
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        .program-lock-overlay[hidden],
+        .program-lock-options[hidden],
+        .program-lock-button[hidden],
+        .program-password-form[hidden],
+        .program-password-cue[hidden] {
+            display: none;
+        }
+
+        .program-lock-button {
+            appearance: none;
+            background: transparent;
+            border: 0;
+            color: inherit;
+            cursor: pointer;
+            justify-self: center;
+            padding: 1rem;
+            transform: translate(var(--program-lock-shift-x, 0), var(--program-lock-offset-y));
+        }
+
+        .program-lock-button:focus-visible,
+        .program-password-input:focus-visible,
+        .program-password-submit:focus-visible {
+            outline: 1px solid currentColor;
+            outline-offset: 0.3rem;
+        }
+
+        .program-lock-image {
+            display: block;
+            height: auto;
+            transition: opacity 300ms ease;
+            width: var(--program-lock-width);
+        }
+
+        .program-password-form {
+            align-items: center;
+            background: var(--cream);
+            border: 1px solid currentColor;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-width: calc(100% - 2rem);
+            padding: 1.25rem;
+            width: 20rem;
+        }
+
+        .program-password-form label {
+            font-style: normal;
+            text-align: center;
+        }
+
+        .program-password-fields {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .program-password-input,
+        .program-password-submit {
+            background: transparent;
+            border: 1px solid currentColor;
+            color: inherit;
+            font: inherit;
+            padding: 0.55rem 0.65rem;
+        }
+
+        .program-password-input {
+            min-width: 0;
+            width: 100%;
+        }
+
+        .program-password-submit {
+            cursor: pointer;
+            font-style: italic;
+        }
+
+        .program-password-message {
+            font-size: 0.9rem;
+            margin: 0;
+            min-height: 1.25em;
+        }
+
+        .program-lock-overlay.is-unlocking {
+            pointer-events: none;
+        }
+
+        .program-lock-overlay.is-disappearing {
+            opacity: 0;
+            transition: opacity var(--program-lock-fade-duration, 300ms) ease;
+        }
+
+        .program-password-cue {
+            animation: program-password-cue-in 900ms ease forwards;
+            margin: 1.5rem auto 0;
+            text-align: center;
+        }
+
+        .program-password-cue strong {
+            font-weight: 400;
+            letter-spacing: 0.08em;
+        }
+
+        @keyframes program-password-cue-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .program-surface-action,
+        .program-flip-control {
+            appearance: none;
+            background: transparent;
+            border: 0;
+            color: inherit;
+            font: inherit;
+        }
+
+        .program-fallback-page {
+            display: block;
+            height: auto;
+            margin: 0 auto 2rem;
+            width: min(100%, 21rem);
+        }
+
+        .program-fallback-spread {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            margin: 0 auto 2rem;
+            max-width: 42rem;
+            width: 100%;
+        }
+
+        .program-fallback-spread .program-fallback-page {
+            margin: 0;
+            width: 100%;
+        }
+
+        .program-stage {
+            display: none;
+        }
+
+        .program-paper {
+            background: #fff;
+            display: block;
+            height: 100%;
+            object-fit: fill;
+            width: 100%;
+        }
+
+        .program-pamphlet--enhanced .program-stage {
+            aspect-ratio: 792 / 612;
+            display: block;
+            margin-inline: auto;
+            perspective: 110rem;
+            position: relative;
+            width: 100%;
+        }
+
+        .program-pamphlet--enhanced .program-fallback {
+            display: none;
+        }
+
+        .program-book {
+            height: 100%;
+            inset: 0;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: opacity 1ms linear 850ms, transform 850ms cubic-bezier(0.22, 0.75, 0.2, 1);
+            width: 100%;
+        }
+
+        .program-cover-sheet,
+        .program-back-sheet {
+            height: 100%;
+            left: 50%;
+            position: absolute;
+            top: 0;
+            width: 50%;
+        }
+
+        .program-cover-sheet,
+        .program-back-sheet {
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 850ms cubic-bezier(0.22, 0.75, 0.2, 1);
+        }
+
+        .program-cover-sheet {
+            z-index: 2;
+        }
+
+        .program-back-sheet {
+            z-index: 1;
+        }
+
+        .program-paper-face {
+            backface-visibility: hidden;
+            box-shadow: 0.4rem 0.65rem 1.5rem rgba(0, 0, 0, 0.16);
+            height: 100%;
+            inset: 0;
+            position: absolute;
+            width: 100%;
+        }
+
+        .program-paper-face--back {
+            transform: rotateY(180deg);
+        }
+
+        .program-closed-card {
+            display: none;
+            height: 100%;
+            left: 25%;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            transform-style: preserve-3d;
+            width: 50%;
+        }
+
+        .program-mobile-stack {
+            display: none;
+        }
+
+        .program-pamphlet--enhanced[data-program-state="front"] .program-book {
+            opacity: 1;
+            transform: translateX(-25%);
+            transition-delay: 0ms;
+        }
+
+        .program-pamphlet--enhanced[data-program-state="front"] .program-cover-sheet,
+        .program-pamphlet--enhanced[data-program-state="front"] .program-back-sheet {
+            transform: rotateY(0deg);
+        }
+
+        .program-pamphlet--enhanced[data-program-state="inside"] .program-book {
+            opacity: 1;
+            transform: translateX(0);
+            transition-delay: 0ms;
+        }
+
+        .program-pamphlet--enhanced[data-program-state="inside"] .program-cover-sheet {
+            transform: rotateY(-180deg);
+        }
+
+        .program-pamphlet--enhanced[data-program-state="inside"] .program-back-sheet {
+            transform: rotateY(0deg);
+        }
+
+        .program-pamphlet--enhanced[data-program-state="back"] .program-book {
+            opacity: 1;
+            transform: translateX(25%);
+            transition-delay: 0ms;
+        }
+
+        .program-pamphlet--enhanced[data-program-state="back"] .program-cover-sheet,
+        .program-pamphlet--enhanced[data-program-state="back"] .program-back-sheet {
+            transform: rotateY(-180deg);
+        }
+
+        .program-pamphlet--enhanced[data-program-state="back"] .program-back-sheet {
+            z-index: 3;
+        }
+
+        .program-pamphlet--enhanced[data-program-transition="to-inside"] .program-back-sheet {
+            z-index: 3;
+        }
+
+        .program-surface-action {
+            cursor: pointer;
+            padding: 0;
+            pointer-events: none;
+            position: absolute;
+            z-index: 5;
+        }
+
+        .program-surface-action--front {
+            height: 100%;
+            left: 25%;
+            top: 0;
+            width: 50%;
+        }
+
+        .program-surface-action--back {
+            height: 100%;
+            left: 25%;
+            top: 0;
+            width: 50%;
+        }
+
+        .program-surface-action--inside-left,
+        .program-surface-action--inside-right {
+            height: 100%;
+            top: 0;
+            width: 50%;
+        }
+
+        .program-surface-action--inside-left {
+            left: 0;
+        }
+
+        .program-surface-action--inside-right {
+            left: 50%;
+        }
+
+        .program-pamphlet--enhanced[data-program-state="front"] .program-surface-action--front,
+        .program-pamphlet--enhanced[data-program-state="inside"] .program-surface-action--inside-left,
+        .program-pamphlet--enhanced[data-program-state="inside"] .program-surface-action--inside-right,
+        .program-pamphlet--enhanced[data-program-state="back"] .program-surface-action--back {
+            pointer-events: auto;
+        }
+
+        .program-controls {
+            display: none;
+        }
+
+        .program-pamphlet--enhanced .program-controls {
+            display: grid;
+            grid-template-areas: "control";
+            min-height: 2.75rem;
+            padding-top: 0.5rem;
+        }
+
+        .program-pamphlet--enhanced .program-flip-control {
+            align-items: center;
+            cursor: pointer;
+            display: inline-flex;
+            font-size: 0.95rem;
+            font-style: italic;
+            gap: 0.45rem;
+            grid-area: control;
+            justify-self: end;
+            opacity: 0;
+            padding: 0.45rem 0.2rem;
+            pointer-events: none;
+            transition: opacity 250ms ease;
+        }
+
+        .program-pamphlet--enhanced .program-flip-control::after {
+            content: "\2192";
+            display: inline-block;
+            font-size: 1.35em;
+            line-height: 1;
+            transition: transform 250ms ease;
+        }
+
+        .program-pamphlet--enhanced .program-flip-control:hover::after,
+        .program-pamphlet--enhanced .program-flip-control:focus-visible::after {
+            transform: translateX(0.25rem);
+        }
+
+        .program-pamphlet--enhanced .program-flip-control--front,
+        .program-pamphlet--enhanced .program-flip-control--back {
+            justify-self: start;
+        }
+
+        .program-pamphlet--enhanced .program-flip-control--front::after,
+        .program-pamphlet--enhanced .program-flip-control--back::after {
+            content: none;
+        }
+
+        .program-pamphlet--enhanced .program-flip-control--front::before,
+        .program-pamphlet--enhanced .program-flip-control--back::before {
+            content: "\2190";
+            display: inline-block;
+            font-size: 1.35em;
+            line-height: 1;
+            transition: transform 250ms ease;
+        }
+
+        .program-pamphlet--enhanced .program-flip-control--front:hover::before,
+        .program-pamphlet--enhanced .program-flip-control--front:focus-visible::before,
+        .program-pamphlet--enhanced .program-flip-control--back:hover::before,
+        .program-pamphlet--enhanced .program-flip-control--back:focus-visible::before {
+            transform: translateX(-0.25rem);
+        }
+
+        .program-pamphlet--enhanced[data-program-state="inside"] .program-flip-control--front,
+        .program-pamphlet--enhanced[data-program-state="inside"] .program-flip-control--over,
+        .program-pamphlet--enhanced[data-program-state="back"] .program-flip-control--back {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .program-surface-action:focus-visible,
+        .program-flip-control:focus-visible {
+            outline: 1px solid currentColor;
+            outline-offset: 0.3rem;
+        }
+
+        .program-label {
+            display: inline-block;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .program-screen-reader {
+            clip: rect(0 0 0 0);
+            clip-path: inset(50%);
+            height: 1px;
+            overflow: hidden;
+            position: absolute;
+            white-space: nowrap;
+            width: 1px;
+        }
+
+        .poetry-library {
+            display: grid;
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+
+        .poetry-flipbook {
+            outline: none;
+            text-align: center;
+        }
+
+        .poetry-flipbook:focus-visible {
+            outline: none;
+        }
+
+        .poetry-flipbook:focus-visible .poetry-flipbook-label {
+            text-decoration: underline;
+            text-underline-offset: 0.25em;
+        }
+
+        .poetry-flipbook-fallback {
+            display: grid;
+            gap: 1rem;
+            justify-items: center;
+        }
+
+        .poetry-flipbook-fallback .poetry-flipbook-page {
+            height: auto;
+            width: min(100%, 21rem);
+        }
+
+        .poetry-flipbook-stage,
+        .poetry-flipbook-controls {
+            display: none;
+        }
+
+        .poetry-flipbook--enhanced .poetry-flipbook-fallback {
+            display: none;
+        }
+
+        .poetry-flipbook--enhanced .poetry-flipbook-stage {
+            aspect-ratio: 792 / 612;
+            display: block;
+            margin-inline: auto;
+            perspective: 110rem;
+            position: relative;
+            width: 100%;
+        }
+
+        .poetry-flipbook-spread-host,
+        .poetry-flipbook-spread {
+            height: 100%;
+            inset: 0;
+            position: absolute;
+            width: 100%;
+        }
+
+        .poetry-flipbook-page {
+            background: #fff;
+            display: block;
+            object-fit: fill;
+        }
+
+        .poetry-flipbook-spread .poetry-flipbook-page {
+            box-shadow: 0.4rem 0.65rem 1.5rem rgba(0, 0, 0, 0.16);
+            height: 100%;
+            position: absolute;
+            top: 0;
+            width: 50%;
+        }
+
+        .poetry-flipbook-spread--single .poetry-flipbook-page {
+            left: 25%;
+        }
+
+        .poetry-flipbook-spread--double .poetry-flipbook-page:first-child {
+            left: 0;
+        }
+
+        .poetry-flipbook-spread--double .poetry-flipbook-page:last-child {
+            left: 50%;
+        }
+
+        .poetry-flipbook-leaf {
+            height: 100%;
+            left: 50%;
+            position: absolute;
+            top: 0;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            width: 50%;
+            z-index: 4;
+        }
+
+        .poetry-flipbook-transition {
+            height: 100%;
+            inset: 0;
+            position: absolute;
+            transform-style: preserve-3d;
+            width: 100%;
+            z-index: 4;
+        }
+
+        .poetry-flipbook-transition-page {
+            box-shadow: 0.4rem 0.65rem 1.5rem rgba(0, 0, 0, 0.16);
+            height: 100%;
+            position: absolute;
+            top: 0;
+            width: 50%;
+        }
+
+        .poetry-flipbook-transition-page--left {
+            left: 0;
+        }
+
+        .poetry-flipbook-transition-page--right {
+            left: 50%;
+        }
+
+        .poetry-flipbook-transition[data-direction="forward"][data-geometry="open"] {
+            animation: poetry-book-open-forward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+        }
+
+        .poetry-flipbook-transition[data-direction="backward"][data-geometry="open"] {
+            animation: poetry-book-open-backward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+        }
+
+        .poetry-flipbook-transition[data-direction="forward"][data-geometry="close"] {
+            animation: poetry-book-close-forward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+        }
+
+        .poetry-flipbook-transition[data-direction="backward"][data-geometry="close"] {
+            animation: poetry-book-close-backward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+        }
+
+        .poetry-flipbook-leaf[data-direction="forward"][data-geometry="open"] {
+            animation: poetry-open-forward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+        }
+
+        .poetry-flipbook-leaf[data-direction="backward"][data-geometry="open"] {
+            animation: poetry-open-backward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+        }
+
+        .poetry-flipbook-leaf[data-direction="forward"][data-geometry="turn"] {
+            animation: poetry-turn-forward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+        }
+
+        .poetry-flipbook-leaf[data-direction="backward"][data-geometry="turn"] {
+            animation: poetry-turn-backward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+        }
+
+        .poetry-flipbook-leaf[data-direction="forward"][data-geometry="close"] {
+            animation: poetry-close-forward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+        }
+
+        .poetry-flipbook-leaf[data-direction="backward"][data-geometry="close"] {
+            animation: poetry-close-backward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+        }
+
+        .poetry-flipbook-leaf-face {
+            backface-visibility: hidden;
+            background: #fff;
+            box-shadow: 0.4rem 0.65rem 1.5rem rgba(0, 0, 0, 0.16);
+            height: 100%;
+            inset: 0;
+            position: absolute;
+            width: 100%;
+        }
+
+        .poetry-flipbook-leaf-face--back {
+            transform: rotateY(180deg);
+        }
+
+        .poetry-flipbook-leaf-face .poetry-flipbook-page {
+            height: 100%;
+            width: 100%;
+        }
+
+        .poetry-flipbook-surface {
+            appearance: none;
+            background: transparent;
+            border: 0;
+            color: inherit;
+            cursor: pointer;
+            height: 100%;
+            padding: 0;
+            position: absolute;
+            top: 0;
+            width: 50%;
+            z-index: 6;
+        }
+
+        .poetry-flipbook-surface--previous {
+            left: 0;
+        }
+
+        .poetry-flipbook-surface--next {
+            right: 0;
+        }
+
+        .poetry-flipbook-surface:disabled {
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .poetry-flipbook-surface:focus-visible,
+        .poetry-flipbook-control:focus-visible {
+            outline: 1px solid currentColor;
+            outline-offset: 0.3rem;
+        }
+
+        .poetry-flipbook--enhanced .poetry-flipbook-controls {
+            align-items: center;
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            min-height: 2.75rem;
+            padding-top: 0.5rem;
+        }
+
+        .poetry-flipbook-control {
+            appearance: none;
+            background: transparent;
+            border: 0;
+            color: inherit;
+            cursor: pointer;
+            font: inherit;
+            font-size: 0.95rem;
+            font-style: italic;
+            padding: 0.45rem 0.2rem;
+        }
+
+        .poetry-flipbook-control--previous {
+            justify-self: start;
+        }
+
+        .poetry-flipbook-control--next {
+            justify-self: end;
+        }
+
+        .poetry-flipbook-control:disabled {
+            cursor: default;
+            opacity: 0.3;
+        }
+
+        .poetry-flipbook-label {
+            display: inline-block;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        @keyframes poetry-open-forward {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(-180deg); }
+        }
+
+        @keyframes poetry-open-backward {
+            from { transform: rotateY(-180deg); }
+            to { transform: rotateY(0deg); }
+        }
+
+        @keyframes poetry-turn-forward {
+            from { left: 50%; transform: rotateY(0deg); }
+            to { left: 50%; transform: rotateY(-180deg); }
+        }
+
+        @keyframes poetry-turn-backward {
+            from { left: 50%; transform: rotateY(-180deg); }
+            to { left: 50%; transform: rotateY(0deg); }
+        }
+
+        @keyframes poetry-close-forward {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(-180deg); }
+        }
+
+        @keyframes poetry-close-backward {
+            from { transform: rotateY(-180deg); }
+            to { transform: rotateY(0deg); }
+        }
+
+        @keyframes poetry-book-open-forward {
+            from { transform: translateX(-25%); }
+            to { transform: translateX(0); }
+        }
+
+        @keyframes poetry-book-open-backward {
+            from { transform: translateX(0); }
+            to { transform: translateX(-25%); }
+        }
+
+        @keyframes poetry-book-close-forward {
+            from { transform: translateX(0); }
+            to { transform: translateX(25%); }
+        }
+
+        @keyframes poetry-book-close-backward {
+            from { transform: translateX(25%); }
+            to { transform: translateX(0); }
+        }
+
+        @keyframes poetry-mobile-forward {
+            from { left: 0; transform: rotateY(0deg); }
+            to { left: 0; transform: rotateY(-180deg); }
+        }
+
+        @keyframes poetry-mobile-backward {
+            from { left: 0; transform: rotateY(-180deg); }
+            to { left: 0; transform: rotateY(0deg); }
+        }
+
+        .soap-content {
+            /* Adjust this value to change the space between section headings. */
+            --collage-heading-spacing: 2.5rem;
+            animation: soap-content-fade-in 1s ease forwards;
+        }
+
+        .soap-content.hidden {
+            display: none;
+        }
+
+        @keyframes soap-content-fade-in {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .bandcamp-release-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .bandcamp-release--part-i {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            .bandcamp-player-region--part-i {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .bandcamp-release--part-ii {
+                grid-column: 1;
+                grid-row: 3;
+            }
+
+            .bandcamp-player-region--part-ii {
+                grid-column: 1;
+                grid-row: 4;
+            }
+
+            .episode-card {
+                flex-basis: min(82vw, 23rem);
+            }
+
+            .episode-carousel-control {
+                height: 2.65rem;
+                width: 2.1rem;
+            }
+
+            .episode-carousel-control--previous {
+                left: -0.65rem;
+            }
+
+            .episode-carousel-control--next {
+                right: -0.65rem;
+            }
+
+            .performance-grid {
+                gap: 0.75rem;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .program-access {
+                max-width: 26rem;
+            }
+
+            .program-password-fields {
+                flex-direction: column;
+            }
+
+            .program-fallback-spread {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .program-pamphlet--enhanced .program-stage {
+                aspect-ratio: 396 / 612;
+                transition: aspect-ratio 650ms ease;
+            }
+
+            .program-pamphlet--enhanced[data-program-state="inside"] .program-stage {
+                aspect-ratio: 396 / 1240;
+            }
+
+            .program-book {
+                display: none;
+            }
+
+            .program-closed-card {
+                display: block;
+                left: 0;
+                width: 100%;
+                transition: opacity 400ms ease, transform 700ms cubic-bezier(0.22, 0.75, 0.2, 1);
+            }
+
+            .program-pamphlet--enhanced[data-program-state="front"] .program-closed-card {
+                opacity: 1;
+                transform: rotateY(0deg);
+            }
+
+            .program-pamphlet--enhanced[data-program-state="back"] .program-closed-card {
+                opacity: 1;
+                transform: rotateY(180deg);
+            }
+
+            .program-mobile-stack {
+                display: grid;
+                gap: 1rem;
+                inset: 0;
+                opacity: 0;
+                position: absolute;
+                transform: rotateX(-55deg) scaleY(0.72);
+                transform-origin: top center;
+                transition: opacity 400ms ease, transform 700ms cubic-bezier(0.22, 0.75, 0.2, 1);
+            }
+
+            .program-pamphlet--enhanced[data-program-state="inside"] .program-mobile-stack {
+                opacity: 1;
+                transform: rotateX(0deg) scaleY(1);
+            }
+
+            .program-pamphlet--enhanced[data-program-transition="to-back"] .program-mobile-stack {
+                animation: program-mobile-stack-away 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+            }
+
+            .program-pamphlet--enhanced[data-program-transition="to-inside"] .program-mobile-stack {
+                animation: program-mobile-stack-in 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+            }
+
+            .program-pamphlet--enhanced[data-program-transition="to-inside"] .program-closed-card {
+                animation: program-mobile-card-away 850ms ease forwards;
+            }
+
+            .poetry-library {
+                gap: 3rem;
+            }
+
+            .poetry-flipbook--enhanced .poetry-flipbook-stage {
+                aspect-ratio: 396 / 612;
+            }
+
+            .poetry-flipbook-spread .poetry-flipbook-page,
+            .poetry-flipbook-spread--single .poetry-flipbook-page,
+            .poetry-flipbook-spread--double .poetry-flipbook-page:first-child,
+            .poetry-flipbook-spread--double .poetry-flipbook-page:last-child {
+                left: 0;
+                width: 100%;
+            }
+
+            .poetry-flipbook-leaf {
+                left: 0;
+                width: 100%;
+            }
+
+            .poetry-flipbook-leaf[data-direction="forward"] {
+                animation: poetry-mobile-forward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+            }
+
+            .poetry-flipbook-leaf[data-direction="backward"] {
+                animation: poetry-mobile-backward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+            }
+
+            .program-surface-action--front,
+            .program-surface-action--back {
+                inset: 0;
+                height: 100%;
+                width: 100%;
+            }
+
+            .program-surface-action--inside-left,
+            .program-surface-action--inside-right {
+                left: 0;
+                width: 100%;
+            }
+
+            .program-surface-action--inside-left {
+                height: calc(50% - 0.5rem);
+                top: 0;
+            }
+
+            .program-surface-action--inside-right {
+                bottom: 0;
+                height: calc(50% - 0.5rem);
+                top: auto;
+            }
+        }
+
+        @keyframes program-mobile-stack-away {
+            0% { opacity: 1; transform: rotateX(0deg) scaleY(1); }
+            100% { opacity: 0; transform: rotateX(-55deg) scaleY(0.72); }
+        }
+
+        @keyframes program-mobile-stack-in {
+            0% { opacity: 0; transform: rotateX(-55deg) scaleY(0.72); }
+            100% { opacity: 1; transform: rotateX(0deg) scaleY(1); }
+        }
+
+        @keyframes program-mobile-card-away {
+            0% { opacity: 1; transform: rotateY(180deg); }
+            100% { opacity: 0; transform: rotateY(90deg); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .program-pamphlet--enhanced .program-stage,
+            .program-book,
+            .program-cover-sheet,
+            .program-back-sheet,
+            .program-closed-card,
+            .program-mobile-stack,
+            .program-pamphlet--enhanced .program-flip-control,
+            .program-pamphlet--enhanced .program-flip-control::before,
+            .program-pamphlet--enhanced .program-flip-control::after {
+                animation-duration: 1ms !important;
+                transition-duration: 1ms;
+            }
+
+            .program-password-cue {
+                animation-duration: 1ms;
+            }
+
+            .program-lock-image,
+            .program-lock-overlay.is-disappearing,
+            .episode-card,
+            .episode-description,
+            .episode-carousel-viewport,
+            .bandcamp-release-artwork-frame {
+                transition-duration: 1ms;
+                scroll-behavior: auto;
+            }
+        }
+
+        .library-return-control {
+            appearance: none;
+            background: transparent;
+            border: 0;
+            color: inherit;
+            cursor: pointer;
+            display: none;
+            font: inherit;
+            font-size: 0.9rem;
+            font-style: italic;
+            margin: 0.65rem auto 0;
+            padding: 0.35rem 0.45rem;
+        }
+
+        .library-return-control::before {
+            content: "← ";
+        }
+
+        .library-return-control:focus-visible {
+            outline: 1px solid currentColor;
+            outline-offset: 0.25rem;
+        }
+
+        .program-access--library-enhanced {
+            max-width: 52rem;
+            width: 100%;
+        }
+
+        .collage-library-content--enhanced {
+            /* Three-up view size knob: raise/lower this percentage to tune all three publications. */
+            --library-all-item-growth: 27%;
+            align-items: center;
+            display: grid;
+            gap: 0.1rem;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+            justify-content: center;
+            margin-inline: auto;
+            width: 100%;
+        }
+
+        .collage-library-content--enhanced > .program-pamphlet {
+            grid-column: 2;
+            grid-row: 1;
+            min-width: 0;
+        }
+
+        .collage-library-content--enhanced > .poetry-library {
+            display: contents;
+        }
+
+        .collage-library-content--enhanced .poetry-flipbook {
+            min-width: 0;
+        }
+
+        .collage-library-content--enhanced .poetry-flipbook:first-child {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .collage-library-content--enhanced .poetry-flipbook:last-child {
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        .collage-library-content--enhanced:not(.is-focused) [data-library-item] {
+            --library-shift-x: 0;
+            cursor: zoom-in;
+            justify-self: center;
+            transform: translateX(var(--library-shift-x));
+            transition: opacity 250ms ease, transform 250ms ease;
+        }
+
+        .collage-library-content--enhanced:not(.is-focused) > .program-pamphlet {
+            width: calc(100% + 2rem + var(--library-all-item-growth));
+        }
+
+        .collage-library-content--enhanced:not(.is-focused) .poetry-flipbook:first-child {
+            --library-shift-x: 0.9rem;
+            width: calc(100% + 1rem + var(--library-all-item-growth));
+        }
+
+        .collage-library-content--enhanced:not(.is-focused) .poetry-flipbook:last-child {
+            --library-shift-x: -0.9rem;
+            width: calc(100% + 1rem + var(--library-all-item-growth));
+        }
+
+        .collage-library-content--enhanced:not(.is-focused) [data-library-item]:hover,
+        .collage-library-content--enhanced:not(.is-focused) [data-library-item]:focus-visible {
+            transform: translate(var(--library-shift-x), -0.25rem);
+        }
+
+        .collage-library-content--enhanced:not(.is-focused) .poetry-flipbook-controls {
+            display: none;
+        }
+
+        .collage-library-content--enhanced:not(.is-focused) .program-controls {
+            display: none;
+        }
+
+        .collage-library-content--enhanced:not(.is-focused) .poetry-flipbook-label,
+        .collage-library-content--enhanced:not(.is-focused) .program-label {
+            margin-top: 0.75rem;
+        }
+
+        .collage-library-content--enhanced.is-focused {
+            display: block;
+        }
+
+        .collage-library-content--enhanced.is-focused [data-library-item]:not(.is-selected) {
+            display: none;
+        }
+
+        .collage-library-content--enhanced.is-focused [data-library-item].is-selected {
+            animation: library-item-expand 500ms cubic-bezier(0.22, 0.75, 0.2, 1);
+            margin-inline: auto;
+            max-width: 42rem;
+            width: 100%;
+        }
+
+        .collage-library-content--enhanced.is-focused [data-library-item].is-selected > .library-return-control {
+            display: block;
+        }
+
+        @keyframes library-item-expand {
+            from { opacity: 0.72; transform: scale(0.82); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            .program-lock-options {
+                grid-template-columns: minmax(0, 1fr);
+                grid-template-rows: repeat(3, minmax(0, 1fr));
+            }
+
+            .program-lock-button--program {
+                --program-lock-shift-x: 0;
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            .program-lock-button--assorted {
+                --program-lock-shift-x: 0;
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .program-lock-button--needle {
+                --program-lock-shift-x: 0;
+                grid-column: 1;
+                grid-row: 3;
+            }
+
+            .program-access--library-enhanced {
+                max-width: 26rem;
+                width: 100%;
+            }
+
+            .collage-library-content--enhanced {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .collage-library-content--enhanced > .program-pamphlet,
+            .collage-library-content--enhanced .poetry-flipbook:first-child,
+            .collage-library-content--enhanced .poetry-flipbook:last-child {
+                grid-column: 1;
+            }
+
+            .collage-library-content--enhanced > .program-pamphlet {
+                grid-row: 1;
+            }
+
+            .collage-library-content--enhanced .poetry-flipbook:first-child {
+                grid-row: 2;
+            }
+
+            .collage-library-content--enhanced .poetry-flipbook:last-child {
+                grid-row: 3;
+            }
+
+            .collage-library-content--enhanced:not(.is-focused) .poetry-flipbook,
+            .collage-library-content--enhanced:not(.is-focused) .poetry-flipbook:first-child,
+            .collage-library-content--enhanced:not(.is-focused) .poetry-flipbook:last-child {
+                --library-shift-x: 0;
+                justify-self: center;
+                width: min(100%, 26rem);
+            }
+
+            .collage-library-content--enhanced:not(.is-focused) > .program-pamphlet {
+                width: 100%;
+            }
+
+            .collage-library-content--enhanced.is-focused [data-library-item].is-selected {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .collage-library-content--enhanced [data-library-item] {
+                animation-duration: 1ms !important;
+                transition-duration: 1ms;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="section-page">
+        <a class="home-back-arrow hidden" href="../index.html" aria-label="Back to home">
+            <img src="../images/back_arrow_2.png" alt="">
+        </a>
+        <h1 class="section-title typewriter-title hidden">synonyms of a person.</h1>
+        <div class="soap-content hidden">
+        <p class="collage-description" style="margin-bottom: 70px;"><em>synonyms of a person</em> is a sound and video collage about life and the human experience.
+            spanning two total hours, it blends together musical samples, voice memos from throughout the artist's life, spoken word
+            of the artist's poems and journal entries, interview clips, and book excerpts. 
+            the collage takes the audience on an impassioned, meandering journey through childhood, dreams, pain, love, drugs, philosophy, and spirituality. 
+            in the artist's words — "a semi-coherent story of my life."</p>
+
+        <section aria-labelledby="collage-film-heading">
+            <h2 class="collage-section-title" id="collage-film-heading">
+                <button class="collage-section-trigger" type="button" aria-expanded="false" aria-controls="collage-film-panel">collage film</button>
+            </h2>
+            <div class="collage-section-panel" id="collage-film-panel" hidden>
+                <div class="viewing-note">
+                    <button class="viewing-note-trigger" type="button" aria-expanded="false" aria-controls="viewing-note-popup">
+                        <span>(best viewing details)</span>
+                    </button>
+                    <br>
+                    <p class="viewing-note-popup" id="viewing-note-popup" hidden>
+                        <span class="viewing-note-popup-line">ideally, watch parts i and ii in a single evening.</span>
+                        <span class="viewing-note-popup-line">conditions — a dark room, a computer (or larger) screen, and headphones or speakers for audio.</span>
+                    </p>
+                </div>
+                <section class="collage-part" aria-labelledby="part-i-heading">
+                    <h3 id="part-i-heading">part i</h3>
+                    <div class="collage-player">
+                        <mux-player
+                            playback-id="s45g02vBw01ue800kPEIzKgvlowogm8lpj01RRhv00HE75cc"
+                            thumbnail-time="1"
+                            aria-label="Synonyms of a Person, part one">
+                        </mux-player>
+                    </div>
+                </section>
+
+                <section class="collage-part" aria-labelledby="part-ii-heading">
+                    <h3 id="part-ii-heading">part ii</h3>
+                    <div class="collage-player">
+                        <mux-player
+                            id="part-ii-player"
+                            playback-id="cesnJ02w34wr1yBdarkjcZlwKP00J6bR7DZPVlYXmXFe00"
+                            thumbnail-time="4"
+                            aria-label="Synonyms of a Person, part two">
+                        </mux-player>
+                    </div>
+                    <p class="program-password-cue" id="program-password-cue" aria-live="polite" hidden>
+                        the password is: <strong>wandering</strong>
+                    </p>
+                </section>
+            </div>
+        </section>
+
+        <section class="collage-audio" aria-labelledby="collage-program-heading">
+            <h2 class="collage-section-title" id="collage-program-heading">
+                <button class="collage-section-trigger" type="button" aria-expanded="false" aria-controls="collage-program-panel">collage program and poetry series</button>
+            </h2>
+            <div class="collage-section-panel" id="collage-program-panel" hidden>
+                <div class="program-access">
+                    <div class="collage-library-content" id="collage-library-content">
+                    <div class="program-pamphlet" data-program-state="front" data-library-item data-library-title="ABQ collage program" role="group" aria-label="Interactive ABQ collage program" aria-describedby="program-keyboard-help library-keyboard-help" tabindex="0">
+                    <p class="program-screen-reader" id="program-state-status" aria-live="polite">The program is showing its front cover.</p>
+                    <p class="program-screen-reader" id="program-interior-description">Page two contains a hand-drawn Time versus Time chart and a theme graph. Page three lists selected samples included in the sound collage.</p>
+                    <p class="program-screen-reader" id="program-keyboard-help">Use the right arrow key to move forward and the left arrow key to move backward through the program.</p>
+                    <div class="program-fallback">
+                        <img class="program-fallback-page" src="collage_program/page-1.png" alt="Front cover: synonyms of a person, sound collage by coalescion, Albuquerque, New Mexico, April 17, 2026">
+                        <div class="program-fallback-spread">
+                            <img class="program-fallback-page" src="collage_program/page-2.png" alt="Interior page two: a hand-drawn Time versus Time chart and a theme graph">
+                            <img class="program-fallback-page" src="collage_program/page-3.png" alt="Interior page three: selected samples included in the sound collage">
+                        </div>
+                        <img class="program-fallback-page" src="collage_program/page-4.png" alt="Back cover listing the cast, resources, and contact information">
+                    </div>
+                    <div class="program-stage" id="program-interior">
+                        <div class="program-book" aria-hidden="true">
+                            <div class="program-back-sheet">
+                                <div class="program-paper-face program-paper-face--front">
+                                    <img class="program-paper" src="collage_program/page-3.png" alt="">
+                                </div>
+                                <div class="program-paper-face program-paper-face--back">
+                                    <img class="program-paper" src="collage_program/page-4.png" alt="">
+                                </div>
+                            </div>
+                            <div class="program-cover-sheet">
+                                <div class="program-paper-face program-paper-face--front">
+                                    <img class="program-paper" src="collage_program/page-1.png" alt="">
+                                </div>
+                                <div class="program-paper-face program-paper-face--back">
+                                    <img class="program-paper" src="collage_program/page-2.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="program-closed-card" aria-hidden="true">
+                            <div class="program-paper-face program-paper-face--front">
+                                <img class="program-paper" src="collage_program/page-1.png" alt="">
+                            </div>
+                            <div class="program-paper-face program-paper-face--back">
+                                <img class="program-paper" src="collage_program/page-4.png" alt="">
+                            </div>
+                        </div>
+                        <div class="program-mobile-stack" aria-hidden="true">
+                            <img class="program-paper" src="collage_program/page-2.png" alt="">
+                            <img class="program-paper" src="collage_program/page-3.png" alt="">
+                        </div>
+                        <button class="program-surface-action program-surface-action--front" type="button" data-program-action="open" aria-controls="program-interior" aria-expanded="false" aria-label="Open the collage program"></button>
+                        <button class="program-surface-action program-surface-action--inside-left" type="button" data-program-action="close" aria-label="Flip page two back to the front cover" aria-describedby="program-interior-description"></button>
+                        <button class="program-surface-action program-surface-action--inside-right" type="button" data-program-action="open-back" aria-label="Flip page three over to the back cover" aria-describedby="program-interior-description"></button>
+                        <button class="program-surface-action program-surface-action--back" type="button" data-program-action="reopen-inside" aria-label="Flip the back cover open to pages two and three"></button>
+                    </div>
+                    <div class="program-controls">
+                        <button class="program-flip-control program-flip-control--front" type="button" data-program-action="flip-front">flip back</button>
+                        <button class="program-flip-control program-flip-control--over" type="button" data-program-action="flip-over">flip over</button>
+                        <button class="program-flip-control program-flip-control--back" type="button" data-program-action="flip-back">flip back</button>
+                    </div>
+                    <p class="program-label">abq collage program</p>
+                    <button class="library-return-control" type="button" data-library-return>return</button>
+                    </div>
+                    <div class="poetry-library">
+                        <section class="poetry-flipbook" data-poetry-flipbook data-book-title="Assorted poems for collage" data-library-item data-library-title="Assorted poems for collage" role="group" aria-labelledby="assorted-poems-label" aria-describedby="library-keyboard-help" tabindex="0">
+                            <div class="poetry-flipbook-fallback">
+                                <img class="poetry-flipbook-page" data-poetry-page src="collage_poetry_series/assorted-poems-for-collage/page-01.png" width="1210" height="1870" alt="Assorted poems for collage, cover page">
+                                <img class="poetry-flipbook-page" data-poetry-page src="collage_poetry_series/assorted-poems-for-collage/page-02.png" width="1210" height="1870" alt="Assorted poems for collage, page 2, the poem remains, with two phrases blurred">
+                                <img class="poetry-flipbook-page" data-poetry-page src="collage_poetry_series/assorted-poems-for-collage/page-03.png" width="1210" height="1870" alt="Assorted poems for collage, page 3, the poem involuntary sepia">
+                                <img class="poetry-flipbook-page" data-poetry-page src="collage_poetry_series/assorted-poems-for-collage/page-04.png" width="1210" height="1870" alt="Assorted poems for collage, page 4, the poem shreddings from my dream journal intertwining on their own accord">
+                                <img class="poetry-flipbook-page" data-poetry-page src="collage_poetry_series/assorted-poems-for-collage/page-05.png" width="1210" height="1870" alt="Assorted poems for collage, page 5, the poem meditations of the night">
+                                <img class="poetry-flipbook-page" data-poetry-page src="collage_poetry_series/assorted-poems-for-collage/page-06.png" width="1210" height="1870" alt="Assorted poems for collage, page 6, the poem interlude before omw">
+                            </div>
+                            <div class="poetry-flipbook-stage" data-poetry-stage>
+                                <div class="poetry-flipbook-spread-host" data-poetry-spread aria-hidden="true"></div>
+                                <button class="poetry-flipbook-surface poetry-flipbook-surface--previous" type="button" data-poetry-action="previous" aria-label="Turn to the previous pages of Assorted poems for collage"></button>
+                                <button class="poetry-flipbook-surface poetry-flipbook-surface--next" type="button" data-poetry-action="next" aria-label="Turn to the next pages of Assorted poems for collage"></button>
+                            </div>
+                            <div class="poetry-flipbook-controls">
+                                <button class="poetry-flipbook-control poetry-flipbook-control--previous" type="button" data-poetry-action="previous">← flip back</button>
+                                <button class="poetry-flipbook-control poetry-flipbook-control--next" type="button" data-poetry-action="next">flip over →</button>
+                            </div>
+                            <p class="poetry-flipbook-label" id="assorted-poems-label">assorted poems</p>
+                            <p class="program-screen-reader" data-poetry-status aria-live="polite">Assorted poems for collage: showing page 1 of 6.</p>
+                            <button class="library-return-control" type="button" data-library-return>return</button>
+                        </section>
+
+                        <section class="poetry-flipbook" data-poetry-flipbook data-book-title="To catch a needle collage series" data-library-item data-library-title="To catch a needle collage series" role="group" aria-labelledby="needle-collage-label" aria-describedby="library-keyboard-help" tabindex="0">
+                            <div class="poetry-flipbook-fallback">
+                                <img class="poetry-flipbook-page" data-poetry-page src="collage_poetry_series/to-catch-a-needle-collage-series/page-01.png" width="1210" height="1870" alt="To catch a needle collage series, cover page">
+                                <img class="poetry-flipbook-page" data-poetry-page src="collage_poetry_series/to-catch-a-needle-collage-series/page-02.png" width="1210" height="1870" alt="To catch a needle collage series, page 2, with the poem title blurred">
+                                <img class="poetry-flipbook-page" data-poetry-page src="collage_poetry_series/to-catch-a-needle-collage-series/page-03.png" width="1210" height="1870" alt="To catch a needle collage series, page 3, with the poem title blurred">
+                                <img class="poetry-flipbook-page" data-poetry-page src="collage_poetry_series/to-catch-a-needle-collage-series/page-04.png" width="1210" height="1870" alt="To catch a needle collage series, page 4, continuation of the previous poem">
+                                <img class="poetry-flipbook-page" data-poetry-page src="collage_poetry_series/to-catch-a-needle-collage-series/page-05.png" width="1210" height="1870" alt="To catch a needle collage series, page 5, with the poem title blurred">
+                                <img class="poetry-flipbook-page" data-poetry-page src="collage_poetry_series/to-catch-a-needle-collage-series/page-06.png" width="1210" height="1870" alt="To catch a needle collage series, page 6, with two name appearances blurred">
+                            </div>
+                            <div class="poetry-flipbook-stage" data-poetry-stage>
+                                <div class="poetry-flipbook-spread-host" data-poetry-spread aria-hidden="true"></div>
+                                <button class="poetry-flipbook-surface poetry-flipbook-surface--previous" type="button" data-poetry-action="previous" aria-label="Turn to the previous pages of To catch a needle collage series"></button>
+                                <button class="poetry-flipbook-surface poetry-flipbook-surface--next" type="button" data-poetry-action="next" aria-label="Turn to the next pages of To catch a needle collage series"></button>
+                            </div>
+                            <div class="poetry-flipbook-controls">
+                                <button class="poetry-flipbook-control poetry-flipbook-control--previous" type="button" data-poetry-action="previous">← flip back</button>
+                                <button class="poetry-flipbook-control poetry-flipbook-control--next" type="button" data-poetry-action="next">flip over →</button>
+                            </div>
+                            <p class="poetry-flipbook-label" id="needle-collage-label">to catch a needle</p>
+                            <p class="program-screen-reader" data-poetry-status aria-live="polite">To catch a needle collage series: showing page 1 of 6.</p>
+                            <button class="library-return-control" type="button" data-library-return>return</button>
+                        </section>
+                    </div>
+                    <p class="program-screen-reader" id="library-keyboard-help">Press Enter or Space to expand a publication. Press Escape or choose view all three to return to the full library.</p>
+                    <p class="program-screen-reader" data-library-focus-status aria-live="polite">All three publications are visible.</p>
+                    </div>
+                    <div class="program-lock-overlay" id="program-lock-overlay" hidden>
+                        <div class="program-lock-options" role="group" aria-label="Unlock the collage program and poetry series">
+                            <button class="program-lock-button program-lock-button--assorted" type="button" data-program-lock-button aria-label="Unlock assorted poems for collage">
+                                <img class="program-lock-image" data-program-lock-image src="../images/password_lock.png" alt="">
+                            </button>
+                            <button class="program-lock-button program-lock-button--program" type="button" data-program-lock-button aria-label="Unlock the ABQ collage program">
+                                <img class="program-lock-image" data-program-lock-image src="../images/password_lock.png" alt="">
+                            </button>
+                            <button class="program-lock-button program-lock-button--needle" type="button" data-program-lock-button aria-label="Unlock to catch a needle collage series">
+                                <img class="program-lock-image" data-program-lock-image src="../images/password_lock.png" alt="">
+                            </button>
+                        </div>
+                        <form class="program-password-form" id="program-password-form" hidden>
+                            <label for="program-password-input">password protected.<br>revealed after watching the collage film.</label>
+                            <div class="program-password-fields">
+                                <input class="program-password-input" id="program-password-input" name="password" type="password" autocomplete="off" spellcheck="false" required>
+                                <button class="program-password-submit" type="submit">open</button>
+                            </div>
+                            <p class="program-password-message" id="program-password-message" role="status" aria-live="polite"></p>
+                        </form>
+                        <p class="program-screen-reader" id="program-access-status" aria-live="polite"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="collage-audio" aria-labelledby="episodes-heading">
+            <h2 class="collage-section-title" id="episodes-heading">
+                <button class="collage-section-trigger" type="button" aria-expanded="false" aria-controls="episodes-panel">film episodes</button>
+            </h2>
+            <div class="collage-section-panel" id="episodes-panel" data-episode-access="locked" hidden>
+                <p class="program-screen-reader" id="episodes-access-status" aria-live="polite">All episodes are locked. Enter the password on any episode to unlock them all.</p>
+                <section class="episode-season" aria-labelledby="episodes-part-i-heading">
+                    <h3 class="episode-season-title" id="episodes-part-i-heading">part i</h3>
+                    <div class="episode-carousel" data-episode-carousel>
+                        <button class="episode-carousel-control episode-carousel-control--previous" type="button" aria-label="Select previous Part I episode" data-carousel-previous>
+                            <img src="../images/back_arrow_2.png" alt="">
+                        </button>
+                        <div class="episode-carousel-viewport" aria-label="Part I episodes">
+                            <ol class="episode-carousel-track">
+                                <li class="episode-card is-selected" tabindex="0" aria-current="true" data-episode-name="episode 1.1">
+                                    <h4>episode 1.1</h4>
+                                    <div class="collage-player">
+                                        <mux-player
+                                            playback-id="hII01adS01QJ2gRmfRCHJHCnvUrYucdKreK01sldtoCrf00"
+                                            backward-seek-offset="10"
+                                            forward-seek-offset="10"
+                                            aria-label="Episode 1.1">
+                                        </mux-player>
+                                    </div>
+                                    <p class="episode-description">wandering along a path, bubbles, exploration always something to do, no fucking plan, play, unzipping reality, miss ya homies, memory, silence.</p>
+                                </li>
+                                <li class="episode-card" tabindex="-1" data-episode-name="episode 1.2">
+                                    <h4>episode 1.2</h4>
+                                    <div class="collage-player">
+                                        <mux-player
+                                            playback-id="lFCl02Z00gMXX02bTTPlRzrvtdKcdz65601gr823FJHFmg00"
+                                            backward-seek-offset="10"
+                                            forward-seek-offset="10"
+                                            aria-label="Episode 1.2">
+                                        </mux-player>
+                                    </div>
+                                    <p class="episode-description">hoop snakes, memory loops, when you feel it, worlds don't last long, time, inspire you to be more of yourself, gods favor dreams.</p>
+                                </li>
+                                <li class="episode-card" tabindex="-1" data-episode-name="episode 1.3">
+                                    <h4>episode 1.3</h4>
+                                    <div class="collage-player">
+                                        <mux-player
+                                            playback-id="5E5Q01wehO6uNJzCCGsFEIPaxtgz6kWCNyzCqOSxG01sE"
+                                            backward-seek-offset="10"
+                                            forward-seek-offset="10"
+                                            aria-label="Episode 1.3">
+                                        </mux-player>
+                                    </div>
+                                    <p class="episode-description">dreams, jazz, ambiguity, dream is the reality.</p>
+                                </li>
+                                <li class="episode-card" tabindex="-1" data-episode-name="episode 1.4">
+                                    <h4>episode 1.4</h4>
+                                    <div class="collage-player">
+                                        <mux-player
+                                            playback-id="ITQwqN8E82HU3lliGBfr2hjKqn7DuVD02YteF4xV4B1o"
+                                            backward-seek-offset="10"
+                                            forward-seek-offset="10"
+                                            aria-label="Episode 1.4">
+                                        </mux-player>
+                                    </div>
+                                    <p class="episode-description">virus chants, moon, listening, flying, birds never fly away in silence, complicated and simple, poetry because human race, passion.</p>
+                                </li>
+                                <li class="episode-card" tabindex="-1" data-episode-name="episode 1.5">
+                                    <h4>episode 1.5</h4>
+                                    <div class="collage-player">
+                                        <mux-player
+                                            playback-id="b3iD5THiY02NOTKX1v7NFzmMnE3CLTsgvPBM5EAOLOd4"
+                                            backward-seek-offset="10"
+                                            forward-seek-offset="10"
+                                            aria-label="Episode 1.5">
+                                        </mux-player>
+                                    </div>
+                                    <p class="episode-description">family, home, mother's laugh, the alejandros, albuquerque, quantum foundations, scared him away, dirt, hot rags, distillation.</p>
+                                </li>
+                            </ol>
+                        </div>
+                        <button class="episode-carousel-control episode-carousel-control--next" type="button" aria-label="Select next Part I episode" data-carousel-next>
+                            <img src="../images/back_arrow_2.png" alt="">
+                        </button>
+                        <p class="episode-carousel-status" aria-live="polite" data-carousel-status></p>
+                    </div>
+                </section>
+                <section class="episode-season" aria-labelledby="episodes-part-ii-heading">
+                    <h3 class="episode-season-title" id="episodes-part-ii-heading">part ii</h3>
+                    <div class="episode-carousel" data-episode-carousel>
+                        <button class="episode-carousel-control episode-carousel-control--previous" type="button" aria-label="Select previous Part II episode" data-carousel-previous>
+                            <img src="../images/back_arrow_2.png" alt="">
+                        </button>
+                        <div class="episode-carousel-viewport" aria-label="Part II episodes">
+                            <ol class="episode-carousel-track">
+                                <li class="episode-card is-selected" tabindex="0" aria-current="true" data-episode-name="episode 2.1">
+                                    <h4>episode 2.1</h4>
+                                    <div class="collage-player">
+                                        <mux-player
+                                            playback-id="wlWWtWU01ZahU3A6IqUBu5yOC75T1nCcgiWdZq8oySVw"
+                                            backward-seek-offset="10"
+                                            forward-seek-offset="10"
+                                            aria-label="Episode 2.1">
+                                        </mux-player>
+                                    </div>
+                                    <p class="episode-description">on or off central, drugs, ethereal cereal, interrupted by a plant, smells, sound of the wind, interactions.</p>
+                                </li>
+                                <li class="episode-card" tabindex="-1" data-episode-name="episode 2.2">
+                                    <h4>episode 2.2</h4>
+                                    <div class="collage-player">
+                                        <mux-player
+                                            playback-id="1c98bZa9dkqBpA01h7QgrXavdhfj488DN3cHH2YEe4g8"
+                                            backward-seek-offset="10"
+                                            forward-seek-offset="10"
+                                            aria-label="Episode 2.2">
+                                        </mux-player>
+                                    </div>
+                                    <p class="episode-description">throw rocks, bas van fraasen, fuck knowledge, let the sun talk, feeling without understanding.</p>
+                                </li>
+                                <li class="episode-card" tabindex="-1" data-episode-name="episode 2.3">
+                                    <h4>episode 2.3</h4>
+                                    <div class="collage-player">
+                                        <mux-player
+                                            playback-id="ZPSC6TZpRHl8QuCJrqz0100Wa4E1cBppn9CzADBUugu58"
+                                            backward-seek-offset="10"
+                                            forward-seek-offset="10"
+                                            aria-label="Episode 2.3">
+                                        </mux-player>
+                                    </div>
+                                    <p class="episode-description">couldn't find the words, help, look away it's okay, it's intense to be a person, sensitivity, cold stream painful soothing.</p>
+                                </li>
+                                <li class="episode-card" tabindex="-1" data-episode-name="episode 2.4">
+                                    <h4>episode 2.4</h4>
+                                    <div class="collage-player">
+                                        <mux-player
+                                            playback-id="Kk4oeoRE8K4JafzGheLaIGEMa9KhYUy5K2yCE79K9fg"
+                                            backward-seek-offset="10"
+                                            forward-seek-offset="10"
+                                            aria-label="Episode 2.4">
+                                        </mux-player>
+                                    </div>
+                                    <p class="episode-description">sensitivity speaks, rhythm, comfort, primordial soup, eating cousins, food and weeping, remains, distractions, bristles. access,</p>
+                                </li>
+                                <li class="episode-card" tabindex="-1" data-episode-name="episode 2.5">
+                                    <h4>episode 2.5</h4>
+                                    <div class="collage-player">
+                                        <mux-player
+                                            playback-id="00r2xzrL7D401gvsxtfrq6mWzfSGHaHm02ksaXtu9FOXDc"
+                                            backward-seek-offset="10"
+                                            forward-seek-offset="10"
+                                            aria-label="Episode 2.5">
+                                        </mux-player>
+                                    </div>
+                                    <p class="episode-description">release. the angles in heaven say, spiritually rich, something will happen, feet not home, security is superstition, grateful.</p>
+                                </li>
+                                <li class="episode-card" tabindex="-1" data-episode-name="episode 2.6">
+                                    <h4>episode 2.6</h4>
+                                    <div class="collage-player">
+                                        <mux-player
+                                            playback-id="mxSAmvQdXDZ801tmcL4hIEZv013bqUmRuWEiQpCSdTP3I"
+                                            backward-seek-offset="10"
+                                            forward-seek-offset="10"
+                                            aria-label="Episode 2.6">
+                                        </mux-player>
+                                    </div>
+                                    <p class="episode-description">everything is maps, wizard physics, synonyms, what truly is, twenty-three years, thread i'm scared to pull through, spine twitches, art is human, wandering, invisible collage credits.</p>
+                                </li>
+                            </ol>
+                        </div>
+                        <button class="episode-carousel-control episode-carousel-control--next" type="button" aria-label="Select next Part II episode" data-carousel-next>
+                            <img src="../images/back_arrow_2.png" alt="">
+                        </button>
+                        <p class="episode-carousel-status" aria-live="polite" data-carousel-status></p>
+                    </div>
+                </section>
+            </div>
+        </section>
+        <section class="collage-audio" aria-labelledby="collage-audio-heading">
+            <h2 class="collage-section-title" id="collage-audio-heading">
+                <button class="collage-section-trigger" type="button" aria-expanded="false" aria-controls="collage-audio-panel">collage audio and support</button>
+            </h2>
+            <div class="collage-section-panel" id="collage-audio-panel" hidden>
+                <div class="bandcamp-releases" data-bandcamp-releases>
+                    <div class="bandcamp-release-grid">
+                        <article class="bandcamp-release bandcamp-release--part-i">
+                            <button
+                                class="bandcamp-release-select"
+                                type="button"
+                                aria-expanded="false"
+                                aria-controls="bandcamp-player-part-i"
+                                data-bandcamp-release
+                                data-player-src="https://bandcamp.com/EmbeddedPlayer/album=2828903298/size=large/bgcol=f9e4bc/linkcol=000000/artwork=small/tracklist=true/transparent=true/"
+                                data-player-title="Listen to synonyms of a person part i by coalescion on Bandcamp">
+                                <span class="bandcamp-release-artwork-frame">
+                                    <img class="bandcamp-release-artwork" src="bandcamp/synonyms-part-i.jpg" alt="Cover artwork for synonyms of a person part i" width="1199" height="1200" loading="lazy">
+                                </span>
+                                <span class="bandcamp-release-part">part i</span>
+                            </button>
+                            <!-- <a class="bandcamp-support-link" href="https://coalescion.bandcamp.com/album/synonyms-of-a-person-part-i" target="_blank" rel="noopener noreferrer">support part i on bandcamp <span aria-hidden="true">&nearr;</span></a> -->
+                        </article>
+                        <div class="bandcamp-player-region bandcamp-player-region--part-i" id="bandcamp-player-part-i" hidden data-bandcamp-player-region></div>
+                        <article class="bandcamp-release bandcamp-release--part-ii">
+                            <button
+                                class="bandcamp-release-select"
+                                type="button"
+                                aria-expanded="false"
+                                aria-controls="bandcamp-player-part-ii"
+                                data-bandcamp-release
+                                data-player-src="https://bandcamp.com/EmbeddedPlayer/album=2462832602/size=large/bgcol=f9e4bc/linkcol=000000/artwork=small/tracklist=true/transparent=true/"
+                                data-player-title="Listen to synonyms of a person part ii by coalescion on Bandcamp">
+                                <span class="bandcamp-release-artwork-frame">
+                                    <img class="bandcamp-release-artwork" src="bandcamp/synonyms-part-ii.jpg" alt="Cover artwork for synonyms of a person part ii" width="1197" height="1200" loading="lazy">
+                                </span>
+                                <span class="bandcamp-release-part">part ii</span>
+                            </button>
+                            <!-- <a class="bandcamp-support-link" href="https://coalescion.bandcamp.com/album/synonyms-of-a-person-part-ii" target="_blank" rel="noopener noreferrer">support part ii on bandcamp <span aria-hidden="true">&nearr;</span></a> -->
+                        </article>
+                        <div class="bandcamp-player-region bandcamp-player-region--part-ii" id="bandcamp-player-part-ii" hidden data-bandcamp-player-region></div>
+                    </div>
+                    <p class="bandcamp-catalog-link"><a href="https://coalescion.bandcamp.com/music" target="_blank" rel="noopener noreferrer">visit / support coalescion. on bandcamp <span aria-hidden="true">&nearr;</span></a></p>
+                </div>
+            </div>
+        </section>
+        <section class="collage-audio" aria-labelledby="gallery-heading">
+            <h2 class="collage-section-title" id="gallery-heading">
+                <button class="collage-section-trigger" type="button" aria-expanded="false" aria-controls="gallery-panel">live performance gallery</button>
+            </h2>
+            <div class="collage-section-panel" id="gallery-panel" hidden>
+                <div class="performance-grid">
+                    <div class="performance-item">
+                        <img class="performance-media" src="performance_gallery/collage reflection photo i.jpg" alt="The artist performing behind a reflective surface in a dark room" loading="lazy">
+                    </div>
+                    <div class="performance-item">
+                        <img class="performance-media" src="performance_gallery/collage reflection photo ii.jpg" alt="A second reflected view of the live sound collage performance" loading="lazy">
+                    </div>
+                    <div class="performance-item">
+                        <img class="performance-media" src="performance_gallery/IMG_4839.jpeg" alt="The artist at a sound collage setup with attendees gathered around" loading="lazy">
+                    </div>
+                    <div class="performance-item">
+                        <img class="performance-media" src="performance_gallery/IMG_4839 (1).jpeg" alt="A close view of printed cards and audio equipment at the performance" loading="lazy">
+                    </div>
+                    <div class="performance-item">
+                        <video class="performance-media" controls playsinline preload="metadata" aria-label="Ab-Soul outro sound collage performance clip">
+                            <source src="performance_gallery/ab-soul-outro-collage-clip.mp4" type="video/mp4">
+                            Your browser does not support the embedded video.
+                        </video>
+                    </div>
+                    <div class="performance-item">
+                        <button class="performance-stack" type="button" aria-label="Cycle through two performance photos">
+                            <img src="performance_gallery/IMG_2543.jpeg" alt="A live performance of Synonyms of a Person before an audience in a dark room" loading="lazy">
+                            <img src="performance_gallery/IMG_2550.jpeg" alt="The artist performing Synonyms of a Person beside a lamp and seated audience" loading="lazy">
+                        </button>
+                    </div>
+                    <div class="performance-item">
+                        <img class="performance-media" src="performance_gallery/collage_mats_stacks.JPG" alt="Handmade poetry booklets and Synonyms of a Person programs arranged on a mosaic table" loading="lazy">
+                    </div>
+                    <div class="performance-item">
+                        <button class="performance-stack" type="button" aria-label="Cycle through five pages of To Catch a Needle">
+                            <img src="performance_gallery/tcan_pg0.JPG" alt="Cover of the handmade poetry booklet To Catch a Needle" loading="lazy">
+                            <img src="performance_gallery/tcan_pg1.JPG" alt="Page one of To Catch a Needle" loading="lazy">
+                            <img src="performance_gallery/tcan_pg2.JPG" alt="Page two of To Catch a Needle" loading="lazy">
+                            <img src="performance_gallery/tcan_pg3.JPG" alt="Page three of To Catch a Needle" loading="lazy">
+                            <img src="performance_gallery/tcan_pg4.JPG" alt="Page four of To Catch a Needle" loading="lazy">
+                        </button>
+                    </div>
+                    <div class="performance-item">
+                        <button class="performance-stack" type="button" aria-label="Cycle through six pages of Assorted Poems">
+                            <img src="performance_gallery/assorted_poems_pg0.JPG" alt="Cover of the handmade Assorted Poems booklet" loading="lazy">
+                            <img src="performance_gallery/assorted_poems_pg1.JPG" alt="Page one of Assorted Poems" loading="lazy">
+                            <img src="performance_gallery/assorted_poems_pg2.JPG" alt="Page two of Assorted Poems" loading="lazy">
+                            <img src="performance_gallery/assorted_poems_pg3.JPG" alt="Page three of Assorted Poems" loading="lazy">
+                            <img src="performance_gallery/assorted_poems_pg4.JPG" alt="Page four of Assorted Poems" loading="lazy">
+                            <img src="performance_gallery/assorted_poems_pg5.JPG" alt="Page five of Assorted Poems" loading="lazy">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </div>
+    </main>
+    <script src="../js/title_spin.js"></script>
+    <script src="../js/soap_page_reveal.js"></script>
+    <script src="../js/typewriter_effect.js"></script>
+    <script src="../js/viewing_note.js"></script>
+    <script src="../js/collapsible_sections.js"></script>
+    <script src="../js/bandcamp_releases.js"></script>
+    <script src="../js/program_password.js"></script>
+    <script src="../js/program_pamphlet.js"></script>
+    <script src="../js/poetry_flipbooks.js"></script>
+    <script src="../js/collage_library.js"></script>
+    <script src="../js/performance_gallery.js"></script>
+    <script src="../js/episode_carousel.js"></script>
+    <script src="../js/episode_password.js"></script>
+</body>
+</html>

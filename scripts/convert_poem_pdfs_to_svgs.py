@@ -22,6 +22,7 @@ SLUG_ALIASES = {
     "my_ears_hear_ear": "my_ear_hears_ear",
     "staggering_starling": "staggering_starlight",
     "to_catch_a_needle_a_second_demo": "to_catch_a_needle",
+    "wobble_2022": "wobble",
 }
 
 
