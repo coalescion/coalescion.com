@@ -317,6 +317,25 @@ main {
   z-index: 1;
 }
 
+.contact-page {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.contact-details {
+  font-size: 1.2rem;
+  line-height: 1.65;
+  margin: 0;
+  text-align: center;
+}
+
+.contact-details a:hover,
+.contact-details a:focus-visible {
+  font-style: italic;
+}
+
 .drawings-root,
 .drawings-page {
   height: 100%;
