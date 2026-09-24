@@ -6,9 +6,7 @@
     <title>synonyms of a person &mdash; coalescion.</title>
     <meta name="description" content="Synonyms of a Person, a two-part sound collage by coalescion.">
     <link rel="canonical" href="https://coalescion.com/sound_collage/soap.html">
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png?v=2">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2">
-    <link rel="manifest" href="/site.webmanifest?v=2">
+    <link rel="icon" type="image/png" sizes="96x96" href="../favicon.png">
     <link rel="stylesheet" href="../css/global_styles.css">
     <script type="module" src="https://cdn.jsdelivr.net/npm/@mux/mux-player"></script>
     <style>
@@ -315,6 +313,18 @@
         .performance-grid.has-expanded-item .performance-item.is-expanded {
             cursor: default;
             grid-column: 1 / -1;
+        }
+
+        .performance-credit {
+            display: none;
+            font-size: 0.85rem;
+            font-style: italic;
+            margin: 0.45rem 0 0;
+            text-align: center;
+        }
+
+        .performance-item.is-expanded > .performance-credit {
+            display: block;
         }
 
         .performance-close {
@@ -914,6 +924,10 @@
             display: none;
         }
 
+        .program-mobile-flipbook {
+            display: none;
+        }
+
         .program-pamphlet--enhanced[data-program-state="front"] .program-book {
             opacity: 1;
             transform: translateX(-25%);
@@ -1347,6 +1361,10 @@
             margin: 0;
         }
 
+        .mobile-control-label {
+            display: none;
+        }
+
         @keyframes poetry-open-forward {
             from { transform: rotateY(0deg); }
             to { transform: rotateY(-180deg); }
@@ -1498,7 +1516,7 @@
             }
 
             .program-pamphlet--enhanced[data-program-state="inside"] .program-stage {
-                aspect-ratio: 396 / 1240;
+                aspect-ratio: 396 / 612;
             }
 
             .program-book {
@@ -1550,6 +1568,42 @@
                 animation: program-mobile-card-away 850ms ease forwards;
             }
 
+            .program-closed-card,
+            .program-mobile-stack {
+                display: none;
+            }
+
+            .program-mobile-flipbook,
+            .program-mobile-page-host,
+            .program-mobile-leaf {
+                height: 100%;
+                inset: 0;
+                position: absolute;
+                width: 100%;
+            }
+
+            .program-mobile-flipbook {
+                display: block;
+            }
+
+            .program-mobile-page-host .program-paper {
+                box-shadow: 0.4rem 0.65rem 1.5rem rgba(0, 0, 0, 0.16);
+            }
+
+            .program-mobile-leaf {
+                transform-origin: center center;
+                transform-style: preserve-3d;
+                z-index: 4;
+            }
+
+            .program-mobile-leaf[data-direction="forward"] {
+                animation: poetry-mobile-forward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+            }
+
+            .program-mobile-leaf[data-direction="backward"] {
+                animation: poetry-mobile-backward 850ms cubic-bezier(0.22, 0.75, 0.2, 1) forwards;
+            }
+
             .poetry-library {
                 gap: 3rem;
             }
@@ -1568,6 +1622,7 @@
 
             .poetry-flipbook-leaf {
                 left: 0;
+                transform-origin: center center;
                 width: 100%;
             }
 
@@ -1588,19 +1643,25 @@
 
             .program-surface-action--inside-left,
             .program-surface-action--inside-right {
-                left: 0;
-                width: 100%;
+                height: 100%;
+                top: 0;
+                width: 50%;
             }
 
             .program-surface-action--inside-left {
-                height: calc(50% - 0.5rem);
-                top: 0;
+                left: 0;
             }
 
             .program-surface-action--inside-right {
-                bottom: 0;
-                height: calc(50% - 0.5rem);
-                top: auto;
+                left: 50%;
+            }
+
+            .desktop-control-label {
+                display: none;
+            }
+
+            .mobile-control-label {
+                display: inline;
             }
         }
 
@@ -1778,6 +1839,7 @@
 
         @media (max-width: 600px) {
             .program-lock-options {
+                row-gap: 1.5rem;
                 grid-template-columns: minmax(0, 1fr);
                 grid-template-rows: repeat(3, minmax(0, 1fr));
             }
@@ -1801,12 +1863,16 @@
             }
 
             .program-access--library-enhanced {
-                max-width: 26rem;
-                width: 100%;
+                left: 50%;
+                margin-inline: 0;
+                max-width: 80vw;
+                transform: translateX(-50%);
+                width: 80vw;
             }
 
             .collage-library-content--enhanced {
                 grid-template-columns: minmax(0, 1fr);
+                row-gap: 3rem;
             }
 
             .collage-library-content--enhanced > .program-pamphlet,
@@ -1832,7 +1898,7 @@
             .collage-library-content--enhanced:not(.is-focused) .poetry-flipbook:last-child {
                 --library-shift-x: 0;
                 justify-self: center;
-                width: min(100%, 26rem);
+                width: 100%;
             }
 
             .collage-library-content--enhanced:not(.is-focused) > .program-pamphlet {
@@ -1958,15 +2024,18 @@
                             <img class="program-paper" src="collage_program/page-2.png" alt="">
                             <img class="program-paper" src="collage_program/page-3.png" alt="">
                         </div>
+                        <div class="program-mobile-flipbook" aria-hidden="true">
+                            <div class="program-mobile-page-host" data-program-mobile-page></div>
+                        </div>
                         <button class="program-surface-action program-surface-action--front" type="button" data-program-action="open" aria-controls="program-interior" aria-expanded="false" aria-label="Open the collage program"></button>
                         <button class="program-surface-action program-surface-action--inside-left" type="button" data-program-action="close" aria-label="Flip page two back to the front cover" aria-describedby="program-interior-description"></button>
                         <button class="program-surface-action program-surface-action--inside-right" type="button" data-program-action="open-back" aria-label="Flip page three over to the back cover" aria-describedby="program-interior-description"></button>
                         <button class="program-surface-action program-surface-action--back" type="button" data-program-action="reopen-inside" aria-label="Flip the back cover open to pages two and three"></button>
                     </div>
                     <div class="program-controls">
-                        <button class="program-flip-control program-flip-control--front" type="button" data-program-action="flip-front">flip back</button>
-                        <button class="program-flip-control program-flip-control--over" type="button" data-program-action="flip-over">flip over</button>
-                        <button class="program-flip-control program-flip-control--back" type="button" data-program-action="flip-back">flip back</button>
+                        <button class="program-flip-control program-flip-control--front" type="button" data-program-action="flip-front"><span class="desktop-control-label">flip back</span><span class="mobile-control-label">back</span></button>
+                        <button class="program-flip-control program-flip-control--over" type="button" data-program-action="flip-over"><span class="desktop-control-label">flip over</span><span class="mobile-control-label">forward</span></button>
+                        <button class="program-flip-control program-flip-control--back" type="button" data-program-action="flip-back"><span class="desktop-control-label">flip back</span><span class="mobile-control-label">back</span></button>
                     </div>
                     <p class="program-label">abq collage program</p>
                     <button class="library-return-control" type="button" data-library-return>return</button>
@@ -1987,8 +2056,8 @@
                                 <button class="poetry-flipbook-surface poetry-flipbook-surface--next" type="button" data-poetry-action="next" aria-label="Turn to the next pages of Assorted poems for collage"></button>
                             </div>
                             <div class="poetry-flipbook-controls">
-                                <button class="poetry-flipbook-control poetry-flipbook-control--previous" type="button" data-poetry-action="previous">← flip back</button>
-                                <button class="poetry-flipbook-control poetry-flipbook-control--next" type="button" data-poetry-action="next">flip over →</button>
+                                <button class="poetry-flipbook-control poetry-flipbook-control--previous" type="button" data-poetry-action="previous"><span class="desktop-control-label">← flip back</span><span class="mobile-control-label">← back</span></button>
+                                <button class="poetry-flipbook-control poetry-flipbook-control--next" type="button" data-poetry-action="next"><span class="desktop-control-label">flip over →</span><span class="mobile-control-label">forward →</span></button>
                             </div>
                             <p class="poetry-flipbook-label" id="assorted-poems-label">assorted poems</p>
                             <p class="program-screen-reader" data-poetry-status aria-live="polite">Assorted poems for collage: showing page 1 of 6.</p>
@@ -2010,8 +2079,8 @@
                                 <button class="poetry-flipbook-surface poetry-flipbook-surface--next" type="button" data-poetry-action="next" aria-label="Turn to the next pages of To catch a needle collage series"></button>
                             </div>
                             <div class="poetry-flipbook-controls">
-                                <button class="poetry-flipbook-control poetry-flipbook-control--previous" type="button" data-poetry-action="previous">← flip back</button>
-                                <button class="poetry-flipbook-control poetry-flipbook-control--next" type="button" data-poetry-action="next">flip over →</button>
+                                <button class="poetry-flipbook-control poetry-flipbook-control--previous" type="button" data-poetry-action="previous"><span class="desktop-control-label">← flip back</span><span class="mobile-control-label">← back</span></button>
+                                <button class="poetry-flipbook-control poetry-flipbook-control--next" type="button" data-poetry-action="next"><span class="desktop-control-label">flip over →</span><span class="mobile-control-label">forward →</span></button>
                             </div>
                             <p class="poetry-flipbook-label" id="needle-collage-label">to catch a needle</p>
                             <p class="program-screen-reader" data-poetry-status aria-live="polite">To catch a needle collage series: showing page 1 of 6.</p>
@@ -2272,27 +2341,33 @@
                 <div class="performance-grid">
                     <div class="performance-item">
                         <img class="performance-media" src="performance_gallery/collage reflection photo i.jpg" alt="The artist performing behind a reflective surface in a dark room" loading="lazy">
+                        <p class="performance-credit">photo by brandon lau</p>
                     </div>
                     <div class="performance-item">
                         <img class="performance-media" src="performance_gallery/collage reflection photo ii.jpg" alt="A second reflected view of the live sound collage performance" loading="lazy">
+                        <p class="performance-credit">photo by brandon lau</p>
                     </div>
                     <div class="performance-item">
                         <img class="performance-media" src="performance_gallery/IMG_4839.jpeg" alt="The artist at a sound collage setup with attendees gathered around" loading="lazy">
+                        <p class="performance-credit">photo by nolan windham</p>
                     </div>
                     <div class="performance-item">
                         <img class="performance-media" src="performance_gallery/IMG_4839 (1).jpeg" alt="A close view of printed cards and audio equipment at the performance" loading="lazy">
+                        <p class="performance-credit">photo by nolan windham</p>
                     </div>
                     <div class="performance-item">
                         <video class="performance-media" controls playsinline preload="metadata" aria-label="Ab-Soul outro sound collage performance clip">
                             <source src="performance_gallery/ab-soul-outro-collage-clip.mp4" type="video/mp4">
                             Your browser does not support the embedded video.
                         </video>
+                        <p class="performance-credit">video by nolan windham</p>
                     </div>
                     <div class="performance-item">
                         <button class="performance-stack" type="button" aria-label="Cycle through two performance photos">
                             <img src="performance_gallery/IMG_2543.jpeg" alt="A live performance of Synonyms of a Person before an audience in a dark room" loading="lazy">
                             <img src="performance_gallery/IMG_2550.jpeg" alt="The artist performing Synonyms of a Person beside a lamp and seated audience" loading="lazy">
                         </button>
+                        <p class="performance-credit">photo by alejandro garcia</p>
                     </div>
                     <div class="performance-item">
                         <img class="performance-media" src="performance_gallery/collage_mats_stacks.JPG" alt="Handmade poetry booklets and Synonyms of a Person programs arranged on a mosaic table" loading="lazy">
