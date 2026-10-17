@@ -90,6 +90,15 @@
       date: "june 2026",
       description: "while tabling for <em>lexiconic.</em> at red hook art market.",
     },
+    {
+      src: "../drawings/drawing_10.16.26_display.webp",
+      width: 772,
+      height: 1200,
+      label: "orientation notes",
+      title: "orientation notes",
+      date: "completed 10.16.26",
+      description: "my notes from orientation week of the physics phd program.",
+    },
   ];
 
   const configuredDriftSpeed = Number.parseFloat(
