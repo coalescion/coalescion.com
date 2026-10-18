@@ -99,6 +99,15 @@
       date: "completed 10.16.26",
       description: "my notes from orientation week of the physics phd program.",
     },
+    {
+      src: "../drawings/drawing_9.2.26_display.webp",
+      width: 734,
+      height: 1200,
+      label: "untitled 005",
+      title: "untitled 005",
+      date: "9.2.26",
+      description: "",
+    },
   ];
 
   const configuredDriftSpeed = Number.parseFloat(
